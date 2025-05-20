@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { usePopSlide } from "@/providers/popslide-provider";
 import { CartPopup } from "@/features/cart/components/cart.popup";
+import { HistoryPopup } from "@/features/history-order/components/history.popup";
 
 // Define menu items
 const menuItems = [
@@ -80,6 +81,7 @@ export default function MainMenu() {
 						<button
 							type="button"
 							className="p-5 hover:bg-(--hijau-muda) rounded-lg"
+							onClick={() => openPopup(<HistoryPopup />)}
 						>
 							<Image src={History} alt="history button" height={20} />
 						</button>

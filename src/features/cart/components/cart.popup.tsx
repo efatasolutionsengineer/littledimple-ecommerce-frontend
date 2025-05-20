@@ -27,8 +27,8 @@ export const CartPopup = () => {
             </div>
             <div className="overflow-y-auto flex-1">
                 {cartItems.data
-                    ? cartItems.data.map((item: CartItem) => (
-                        <ProductCard key={item.id} data={item} quantity={item.quantity} />
+                    ? cartItems.data.map((item: CartItem, index: number) => (
+                        <ProductCard key={index} data={item} quantity={item.quantity} />
                     ))
                     : <div>No items in cart</div>
                 }
