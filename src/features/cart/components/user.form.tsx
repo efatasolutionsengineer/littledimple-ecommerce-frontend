@@ -2,34 +2,31 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import type { SubmitHandler } from "react-hook-form";
 import FormInput from "@/shared/components/form/form-input";
-import { CartItem } from "../types";
-const checkoutSchema = z.object({
-    full_name: z.string().min(1, "Full name is required"),
-    email: z.string().email("Invalid email address").min(1, "Email is required"),
-    phone: z.string().min(1, "Phone number is required"),
-    address: z.string().min(1, "Address is required"),
-    province_id: z.string().min(1, "Province is required"),
-    province_name: z.string().min(1, "Province is required"),
-    city_id: z.string().min(1, "City is required"),
-    city_name: z.string().min(1, "City is required"),
-    subdistrict_id: z.string().min(1, "Subdistrict is required"),
-    subdistrict_name: z.string().min(1, "Subdistrict is required"),
-    postal_code: z.string().min(1, "Postal code is required"),
-    notes: z.string().optional(),
-    coupon: z.string().optional(),
-    payment_method: z.string().min(1, "Payment method is required"),
-});
+import { CartItem, CheckoutFormType, checkoutSchema } from "../types";
+import { useSubmitCheckout } from "../hooks";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-type CheckoutFormType = z.infer<typeof checkoutSchema>;
-
-export default function UserForm({data}: {data: CartItem[]}) {
+export default function UserForm({ data }: { data: CartItem[] }) {
+    const router = useRouter();
     const subtotal = data.reduce((acc: number, item: CartItem) => acc + item.price * item.quantity, 0)
     const shipping = 1999999999
     const total = subtotal + shipping
 
+    const { mutate: submitCheckout, isPending: isSubmitting } = useSubmitCheckout({
+        onSuccess: () => {
+            toast.success('Checkout berhasil, redirect ke halaman pembayaran');
+            const timeout = setTimeout(() => {
+                router.push('/checkout/payment');
+                clearTimeout(timeout);
+            }, 3000);
+        },
+        onError: (error) => {
+            toast.error(error.message);
+        }
+    });
     const form = useForm<CheckoutFormType>({
         resolver: zodResolver(checkoutSchema),
         defaultValues: {
@@ -37,23 +34,46 @@ export default function UserForm({data}: {data: CartItem[]}) {
             email: "",
             phone: "",
             address: "",
-            province_id: "",
             province_name: "",
-            city_id: "",
             city_name: "",
-            subdistrict_id: "",
             subdistrict_name: "",
             postal_code: "",
-            notes: "",
+            payment_method: "",
+            coupon: "",
         }
     });
 
-    const onSubmit: SubmitHandler<CheckoutFormType> = async (data) => {
+    const onSubmit: SubmitHandler<CheckoutFormType> = async (dataForm) => {
+        console.log(dataForm, 'data');
         try {
-            // TODO: Handle form submission
-            console.log(data);
+            submitCheckout({
+                self_information: {
+                    name: dataForm.full_name,
+                    nohp: dataForm.phone,
+                    email: dataForm.email,
+                },
+                list_product: data.map((item) => ({
+                    product_id: item.id,
+                    quantity: item.quantity,
+                })),
+                price_shipping: shipping,
+                shipping_information: {
+                    address: dataForm.address,
+                    province: dataForm.province_name,
+                    city: dataForm.city_name,
+                    subdistrict: dataForm.subdistrict_name,
+                    postalcode: dataForm.postal_code,
+                    price: total,
+                    district: ""
+                },
+                subtotal: subtotal,
+                total: total,
+                payment_method: dataForm.payment_method,
+                coupon: [{ coupon_id: dataForm.coupon ?? "" }],
+            });
         } catch (error) {
-            console.error(error);
+            console.error('Error during checkout:', error);
+            throw error;
         }
     };
 
@@ -63,7 +83,7 @@ export default function UserForm({data}: {data: CartItem[]}) {
             className="space-y-4 grid sm:grid-cols-2 gap-10 p-2"
         >
             <div>
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-4 mb-2">
                     <FormInput<CheckoutFormType>
                         id="full_name"
                         label="Name"
@@ -84,7 +104,7 @@ export default function UserForm({data}: {data: CartItem[]}) {
                     />
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-4 mb-2">
                     <FormInput<CheckoutFormType>
                         id="email"
                         label="Email"
@@ -104,7 +124,7 @@ export default function UserForm({data}: {data: CartItem[]}) {
                         rows={3}
                     />
                 </div>
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-4 mb-2">
                     <FormInput<CheckoutFormType>
                         id="province_name"
                         label="Province"
@@ -115,10 +135,28 @@ export default function UserForm({data}: {data: CartItem[]}) {
                     />
                     <FormInput<CheckoutFormType>
                         id="city_name"
-                        label="Region"
-                        placeholder="region"
+                        label="City"
+                        placeholder="city"
                         register={form.register}
                         name="city_name"
+                        errors={form.formState.errors}
+                    />
+                </div>
+                <div className="grid sm:grid-cols-2 gap-4 mb-2">
+                    <FormInput<CheckoutFormType>
+                        id="subdistrict_name"
+                        label="Subdistrict"
+                        placeholder="subdistrict"
+                        register={form.register}
+                        name="subdistrict_name"
+                        errors={form.formState.errors}
+                    />
+                    <FormInput<CheckoutFormType>
+                        id="postal_code"
+                        label="Postal Code"
+                        placeholder="postal code"
+                        register={form.register}
+                        name="postal_code"
                         errors={form.formState.errors}
                     />
                 </div>
@@ -157,6 +195,7 @@ export default function UserForm({data}: {data: CartItem[]}) {
                         <option value="va">VA (Virtual Account)</option>
                         <option value="indomart-alfamart">Indomaret/Alfamart</option>
                     </select>
+                    <p className="text-red-500 text-sm">{form.formState.errors.payment_method?.message}</p>
                 </div>
             </div>
             <div className="mt-10 flex flex-col items-end">
@@ -175,12 +214,13 @@ export default function UserForm({data}: {data: CartItem[]}) {
                     </div>
                 </div>
                 <div className="flex items-start max-w-[360px] w-full">
-                <button
-                    type="submit"
-                    className="max-w-[160px] w-full bg-[#7AB6B2] text-white py-3 rounded-lg hover:bg-opacity-90 transition-colors"
-                >
-                    Submit
-                </button>
+                    <button
+                        type="submit"
+                        disabled={form.formState.isSubmitting}
+                        className="max-w-[160px] w-full bg-[#7AB6B2] text-white py-3 rounded-lg hover:bg-opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {form.formState.isSubmitting || isSubmitting ? 'Submitting...' : 'Submit'}
+                    </button>
                 </div>
             </div>
         </form>

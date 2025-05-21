@@ -16,6 +16,10 @@
   --primary-ungu: #CBADD2;
   --neutral-1: #FAF5F2;
   --teritary-ungu: #CBADD2;
+  --text-title: 30px;
+  --text-subtitle: 20px;
+  --text-large: 18px;
+  --text-body: 16px;
 }
 
 @theme inline {
@@ -34,6 +38,10 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-teritary-ungu: var(--teritary-ungu);
+  --text-title: var(--text-title);
+  --text-subtitle: var(--text-subtitle);
+  --text-body: var(--text-body);
+  --text-large: var(--text-large);
 }
 
 body {
@@ -44,6 +52,11 @@ body {
 select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   @apply appearance-none bg-[length:20px] bg-[right_8px_center] bg-no-repeat pr-8 bg-[#f8f8f8] border border-[#e2e2e2] rounded-lg
+}
+
+select.left-arrow {
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2210%22%20height%3D%2211%22%20viewBox%3D%220%200%2010%2011%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M5.96%205.5L2.22%209.24C2.12%209.34%202.06%209.48%202.06%209.63C2.06%209.77%202.12%209.91%202.22%2010.01L2.55%2010.34C2.65%2010.44%202.79%2010.5%202.94%2010.5C3.08%2010.5%203.22%2010.44%203.32%2010.34L7.78%205.89C7.88%205.78%207.94%205.64%207.94%205.5C7.94%205.35%207.88%205.21%207.78%205.11L3.33%200.66C3.22%200.56%203.09%200.5%202.94%200.5C2.79%200.5%202.66%200.56%202.55%200.66L2.23%200.99C2.01%201.2%202.01%201.55%202.23%201.76L5.96%205.5Z%22%20fill%3D%22%237E8185%22/%3E%3C/svg%3E");
+  background-size: 10px;
 }
 
 .custom-select input {

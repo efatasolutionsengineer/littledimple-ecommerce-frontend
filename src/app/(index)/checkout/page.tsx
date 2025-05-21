@@ -11,7 +11,7 @@ export default function CheckoutPage() {
     const { data, isLoading, isError, error } = useGetCart();
 
     useEffect(() => {
-        updateLayout({ title: 'Checkout', slug: 'Checkout' })
+        updateLayout({ title: 'Checkout', slug: 'Shop' })
     }, [])
 
     if (isLoading) {

@@ -1,5 +1,5 @@
 import { fetchWithAuth } from "../auth/utils";
-import { CartItem } from "./types";
+import { CartItem, CheckoutData } from "./types";
 
 export const addToCart = async ({product_name, price, quantity, media_link}: CartItem) => {
     const url = new URL(`/api/cart/me`, process.env.NEXT_PUBLIC_API_URL);
@@ -20,6 +20,16 @@ export const getCart = async () => {
     const url = new URL(`/api/cart/me`, process.env.NEXT_PUBLIC_API_URL);
     const response = await fetchWithAuth(url.toString(), {
         method: 'GET',
+    });
+    const data = await response.json();
+    return data;
+};
+
+export const submitCheckout = async (checkoutData: CheckoutData) => {
+    const url = '/api/cart/checkout';
+    const response = await fetchWithAuth(url.toString(), {
+        method: 'POST',
+        body: JSON.stringify(checkoutData),
     });
     const data = await response.json();
     return data;

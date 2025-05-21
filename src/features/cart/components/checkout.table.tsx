@@ -15,8 +15,8 @@ export default function CheckoutTable({ data }: { data: CartItem[] }) {
                 </thead>
                 <tbody>
                     {
-                        data.map((item: CartItem) => (
-                            <tr key={item.id} className="border-b border-gray-200">
+                        data.map((item: CartItem, index: number) => (
+                            <tr key={index} className="border-b border-gray-200">
                                 <td className="py-4 w-[40%] flex gap-5 items-center">
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
