@@ -1,9 +1,3 @@
-'use client';
-import { useEffect, useState } from 'react'
-import { fetchDimpleData } from '@/app/api/dimple_squad/dimple-get';
-import { DimpleData } from '@/types/dimple';
-import Loading from "../../shared/components/loading"
-import Swal from 'sweetalert2';
 import Image from "next/image";
 import Gelombang from "@/assets/images/gelombang.png"
 import testimonial from "@/assets/images/dimple_squad/Testimonial.png"
@@ -51,18 +45,6 @@ const activityImage = [
 
 
 export default function DimpleSquad() {
-    const [data, setData] = useState<DimpleData | null>(null);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        fetchDimpleData()
-            .then((res) => setData(res))
-            .catch((err) => setError(err.message));
-    }, []);
-
-    if (error) {console.log('fetching error : ',error)}
-    // if (!data) return <Loading/>;
-
     return (
         <div>
             <div className="h-[386px] bg-(--hijau-tua) relative flex items-center justify-center flex-col p-5 text-white">
@@ -80,7 +62,7 @@ export default function DimpleSquad() {
                     <p>Activity?</p>
                 </div>
                 <div className="px-4 sm:px-40 md:px-70  text-center">
-                    <p className="text-[#7E8185] font-(family-name:--font-dm-sans)">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
+                    <p className="text-[#7E8185] font-(family-name:--font-dm-sans)">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don&apos;t look even slightly believable. If you are going to use a passage of Lorem Ipsum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
                 </div>
                 <div className="pt-20 px-4 sm:px-20 md:px-40">
                     <Image

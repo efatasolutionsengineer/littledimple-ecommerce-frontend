@@ -8,6 +8,7 @@ import { CartItem, CheckoutFormType, checkoutSchema } from "../types";
 import { useSubmitCheckout } from "../hooks";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { ShippingMethodOptions } from "@/features/payment/config";
 
 export default function UserForm({ data }: { data: CartItem[] }) {
     const router = useRouter();
@@ -40,6 +41,7 @@ export default function UserForm({ data }: { data: CartItem[] }) {
             postal_code: "",
             payment_method: "",
             coupon: "",
+            shipping_method: "",
         }
     });
 
@@ -53,7 +55,7 @@ export default function UserForm({ data }: { data: CartItem[] }) {
                     email: dataForm.email,
                 },
                 list_product: data.map((item) => ({
-                    product_id: item.id,
+                    product_id: item.product_name,
                     quantity: item.quantity,
                 })),
                 price_shipping: shipping,
@@ -70,6 +72,7 @@ export default function UserForm({ data }: { data: CartItem[] }) {
                 total: total,
                 payment_method: dataForm.payment_method,
                 coupon: [{ coupon_id: dataForm.coupon ?? "" }],
+                shipping_method: dataForm.shipping_method,
             });
         } catch (error) {
             console.error('Error during checkout:', error);
@@ -196,6 +199,21 @@ export default function UserForm({ data }: { data: CartItem[] }) {
                         <option value="indomart-alfamart">Indomaret/Alfamart</option>
                     </select>
                     <p className="text-red-500 text-sm">{form.formState.errors.payment_method?.message}</p>
+                </div>
+                <div className="font-(family-name:--font-dm-sans) mt-5">
+                    <p className="mb-1">Pilih kurir pengiriman</p>
+                    <select
+                        id="shipping_method"
+                        className="font-(family-name:--font-dm-sans) text-neutral-gray text-[16px] font-medium w-full p-3 border border-gray-300 rounded-lg !bg-neutral-white focus:outline-none focus:ring-2 focus:ring-hijau-tua"
+                        {...form.register("shipping_method")}
+                    >
+                        <option value="">Pilih metode pengiriman</option>
+                        {
+                            ShippingMethodOptions.map((item) => (
+                                <option key={item.id} value={item.id}>{item.name}</option>
+                            ))
+                        }
+                    </select>
                 </div>
             </div>
             <div className="mt-10 flex flex-col items-end">

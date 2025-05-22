@@ -42,6 +42,7 @@ export type CheckoutData = {
     shipping_information: ShippingInformation;
     subtotal: number;
     total: number;
+    shipping_method: string;
 }
 
 
@@ -56,6 +57,7 @@ export const checkoutSchema = z.object({
     postal_code: z.string().min(1, "Postal code is required"),
     coupon: z.string().optional(),
     payment_method: z.string().min(1, "Payment method is required"),
+    shipping_method: z.string().min(1, "Shipping method is required"),
 });
 
 export type CheckoutFormType = z.infer<typeof checkoutSchema>;

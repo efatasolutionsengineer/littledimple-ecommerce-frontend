@@ -1,8 +1,6 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from "react";
-import { fetchHomeData } from "./api/home/home-get";
-import { HomeData } from '@/types/home';
 import Image from "next/image";
 import mountHeader from "@/assets/images/home/mountain.png";
 import arrow from "@/assets/images/home/arrow.png";
@@ -48,6 +46,7 @@ import homecontact5 from "@/assets/images/home/homecontact5.png"
 import homecontact6 from "@/assets/images/home/homecontact6.png"
 import homecontact7 from "@/assets/images/home/homecontact7.png"
 import homedot from "@/assets/images/home/homedot.png"
+
 import homeco1 from "@/assets/images/home/homco1.png"
 import homeco2 from "@/assets/images/home/homeco2.png"
 import homeco3 from "@/assets/images/home/homeco3.png"
@@ -183,37 +182,6 @@ export default function Home() {
 
     return () => clearInterval(interval);
   }, [scrollX, scrollAmount]);
-
-
-  // api
-  const [, setHomeData] = useState<HomeData | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const data = await fetchHomeData();
-        setHomeData(data);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('An unknown error occurred');
-        }
-        console.error(err);
-      }
-    };
-
-    getData();
-  }, []);
-
-  if (error) {
-    console.log("error fetching data : ", error)
-  };
-  // if (!homeData) return <Loading/>;
-
-
-
 
   return (
     <div className="relative">

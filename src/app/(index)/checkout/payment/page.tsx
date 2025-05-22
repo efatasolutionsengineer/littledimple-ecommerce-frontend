@@ -4,22 +4,27 @@ import { useLayoutContext } from "@/providers/index-layout-provider"
 import Link from "next/link"
 import { useEffect } from "react"
 import { PaymentMethodOptions, ShippingMethodOptions } from "@/features/payment/config"
+import { useGetPaymentDetail } from "@/features/payment/hooks"
+import Loading from "@/shared/components/loading"
+import { CheckoutData } from "@/features/cart/types"
 
 export default function PaymentPage() {
     const { updateLayout } = useLayoutContext()
+    const { data: paymentDetail, isLoading, isError } = useGetPaymentDetail()
     useEffect(() => {
         updateLayout({ title: 'Payment', slug: 'Shop' })
     }, [])
-    const paymentMethod = 'qris'
-    const shippingMethod = 'jne'
+
+    if (isLoading) return <Loading />
+    if (isError) return <div>Error</div>
     return (
         <div className="max-w-[1280px] mx-auto px-1 sm:px-5 py-5 my-24 relative flex items-start justify-center flex-wrap gap-10">
             <div className="max-w-[580px] w-full grow">
-                <OrderSummary />
+                <OrderSummary data={paymentDetail} />
             </div>
             <div className="max-w-[580px] w-full grow">
-                <PaymentMethod method={paymentMethod} />
-                <ShippingMethod method={shippingMethod} />
+                <PaymentMethod method={paymentDetail?.payment_method} />
+                <ShippingMethod method={paymentDetail?.shipping_method} />
                 <div className="mt-[20px] w-full">
                     <button className="hover:bg-hijau-tua hover:shadow-lg transition-all duration-300 float-right w-full max-w-[220px] bg-primary-hijau text-white px-[22px] py-[10px] rounded-lg">Payment Now</button>
                 </div>
@@ -28,7 +33,7 @@ export default function PaymentPage() {
     )
 }
 
-const OrderSummary = () => {
+const OrderSummary = ({ data }: { data: CheckoutData }) => {
     return (
         <div>
             <h3 className="text-title text-hijau-tua">Your Order</h3>
@@ -38,19 +43,17 @@ const OrderSummary = () => {
             </div>
             <div className="font-(family-name:--font-dm-sans) text-hijau-tua flex items-center justify-between">
                 <div>
-                    <p>Product Name</p>
                     <p>Subtotal</p>
                     <p>Shipping</p>
                 </div>
                 <div>
-                    <p>Rp. {Number(209049094).toLocaleString('id-ID')}</p>
-                    <p>Rp. {Number(209049094).toLocaleString('id-ID')}</p>
-                    <p>Rp. {Number(209049094).toLocaleString('id-ID')}</p>
+                    <p>Rp. {Number(data.subtotal).toLocaleString('id-ID')}</p>
+                    <p>Rp. {Number(data.price_shipping).toLocaleString('id-ID')}</p>
                 </div>
             </div>
             <div className="text-subtitle text-hijau-tua flex items-center justify-between py-[15px] my-[15px] border-t border-gray-200">
                 <p>Total</p>
-                <p>Rp. {Number(209049094).toLocaleString('id-ID')}</p>
+                <p>Rp. {Number(data.total).toLocaleString('id-ID')}</p>
             </div>
             <div className="text-large font-(family-name:--font-dm-sans) text-hijau-tua bg-[#FAF5F2] rounded-lg p-[30px] text-center">
                 still have something left behind? <Link href="/product" className="text-primary px-1 rounded-lg hover:bg-primary-hijau hover:text-white transition-all duration-300">Shop More</Link>
