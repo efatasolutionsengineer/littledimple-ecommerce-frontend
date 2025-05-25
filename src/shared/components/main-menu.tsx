@@ -38,69 +38,68 @@ export default function MainMenu() {
 	}, [pathname]);
 
 	return (
-		<div className="w-full bg-white flex items-center justify-between shadow-[0_4px_9px_rgba(0,0,0,0.25)]">
-			<div className="max-w-[1440px] w-full mx-auto tracking-wide">
-				{/* Top Info Bar */}
-				<div className="font-(family-name:--font-dm-sans) text-white bg-(--hijau-tua) p-[5px] flex flex-wrap items-center justify-end gap-2 sm:gap-16 w-full px-2">
+		<div className="w-full bg-white shadow-[0_4px_9px_rgba(0,0,0,0.25)]">
+			{/* Top Info Bar */}
+			<div className="w-full bg-hijau-tua">
+				<div className="max-w-[1440px] w-full mx-auto tracking-wide font-(family-name:--font-dm-sans) text-white bg-(--hijau-tua) p-[5px] flex flex-wrap items-center justify-end gap-2 sm:gap-16 w-full px-2">
 					<InfoItem
 						icon={LocationIcon}
 						text="Ruko Sunter Permai Blok K2 D7, Sunter Jaya, Tanjung Priok, Jakarta Utara"
 					/>
 					<InfoItem icon={Mail} text="littledimpleid@gmail.com" isLink />
 				</div>
-
-				{/* Navigation */}
-				<nav className="flex justify-between items-center px-2 flex-wrap gap-2">
-					{/* Logo */}
-					<div className="w-full sm:w-auto text-center">
-						<Image
-							src={BrandLogo}
-							alt="Brand Logo"
-							width="150"
-							className="mx-auto"
-						/>
-					</div>
-
-					{/* Menu Links */}
-					<div className="flex items-center justify-center flex-col sm:flex-row w-full sm:w-auto gap-5 text-[#a5a5a5] text-[18px]">
-						{menuItems.map((item) => (
-							<Link
-								key={item.path}
-								href={item.path}
-								className={`py-2 px-4 hover:text-black w-full sm:w-auto text-center ${
-									position === item.key ? "text-black" : ""
-								}`}
-							>
-								{item.name}
-							</Link>
-						))}
-					</div>
-
-					{/* Placeholder for additional content */}
-					<div className="flex items-center justify-center gap-2 w-full sm:w-auto">
-						<button
-							type="button"
-							className="p-5 hover:bg-(--hijau-muda) rounded-lg"
-							onClick={() => openPopup(<HistoryPopup />)}
-						>
-							<Image src={History} alt="history button" height={20} />
-						</button>
-						<button
-							type="button"
-							className="p-5 hover:bg-(--hijau-muda) rounded-lg"
-							onClick={() => openPopup(<CartPopup />)}
-						>
-							<Image src={Cart} alt="cart button" height={20} />
-						</button>
-						<button
-							type="button"
-							className="p-5 hover:bg-(--hijau-muda) rounded-lg"
-						>
-							<Image src={Profile} alt="profile button" height={20} />
-						</button>
-					</div>
-				</nav>
 			</div>
+
+			{/* Navigation */}
+			<nav className="max-w-[1440px] w-full mx-auto flex justify-between items-center px-2 flex-wrap gap-2">
+				{/* Logo */}
+				<div className="w-full sm:w-auto text-center">
+					<Image
+						src={BrandLogo}
+						alt="Brand Logo"
+						width="150"
+						className="mx-auto"
+					/>
+				</div>
+
+				{/* Menu Links */}
+				<div className="flex items-center justify-center flex-col sm:flex-row w-full sm:w-auto gap-5 text-[#a5a5a5] text-[18px]">
+					{menuItems.map((item) => (
+						<Link
+							key={item.path}
+							href={item.path}
+							className={`py-2 px-4 hover:text-black w-full sm:w-auto text-center ${position === item.key ? "text-black" : ""
+								}`}
+						>
+							{item.name}
+						</Link>
+					))}
+				</div>
+
+				{/* Placeholder for additional content */}
+				<div className="flex items-center justify-center gap-2 w-full sm:w-auto">
+					<button
+						type="button"
+						className="p-5 hover:bg-(--hijau-muda) rounded-lg"
+						onClick={() => openPopup(<HistoryPopup />)}
+					>
+						<Image src={History} alt="history button" height={20} />
+					</button>
+					<button
+						type="button"
+						className="p-5 hover:bg-(--hijau-muda) rounded-lg"
+						onClick={() => openPopup(<CartPopup />)}
+					>
+						<Image src={Cart} alt="cart button" height={20} />
+					</button>
+					<button
+						type="button"
+						className="p-5 hover:bg-(--hijau-muda) rounded-lg"
+					>
+						<Image src={Profile} alt="profile button" height={20} />
+					</button>
+				</div>
+			</nav>
 		</div>
 	);
 }

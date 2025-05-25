@@ -12,6 +12,7 @@ export async function GET(
     // Get pagination parameters with defaults
     const limit = parseInt(searchParams.get('limit') || '10');
     const offset = parseInt(searchParams.get('offset') || '0');
+    const isPopular = searchParams.get('popular') === 'true';
     
     // Filter articles by category
     const filteredArticles = blogArticles.filter(
@@ -25,16 +26,26 @@ export async function GET(
       );
     }
 
-    // Apply pagination
-    const paginatedArticles = filteredArticles.slice(offset, offset + limit);
-    const hasMore = offset + limit < filteredArticles.length;
+    let articlesToReturn = [...filteredArticles];
+
+    // If popular is requested, shuffle the articles
+    if (isPopular) {
+      articlesToReturn = articlesToReturn
+        .sort(() => Math.random() - 0.5)
+        .slice(0, limit);
+    } else {
+      // Apply pagination for non-popular requests
+      articlesToReturn = articlesToReturn.slice(offset, offset + limit);
+    }
+
+    const hasMore = !isPopular && offset + limit < filteredArticles.length;
 
     return NextResponse.json({
-      data: paginatedArticles,
+      data: articlesToReturn,
       meta: {
         total: filteredArticles.length,
         limit,
-        offset,
+        offset: isPopular ? 0 : offset,
         hasMore
       }
     });

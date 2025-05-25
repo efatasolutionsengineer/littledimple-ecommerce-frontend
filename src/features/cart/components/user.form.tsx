@@ -46,7 +46,6 @@ export default function UserForm({ data }: { data: CartItem[] }) {
     });
 
     const onSubmit: SubmitHandler<CheckoutFormType> = async (dataForm) => {
-        console.log(dataForm, 'data');
         try {
             submitCheckout({
                 self_information: {

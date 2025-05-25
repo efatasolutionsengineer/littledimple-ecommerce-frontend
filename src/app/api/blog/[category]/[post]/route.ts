@@ -9,6 +9,10 @@ interface BlogArticle {
   publishedDate: string;
   content: string;
   thumbnail: string;
+  author: {
+    name: string;
+    avatar: string;
+  };
 }
 
 export async function GET(

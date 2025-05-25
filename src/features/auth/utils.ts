@@ -25,7 +25,6 @@ export const isAuthenticated = async () => {
 };
 
 export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
-    console.log('fetchWithAuth', url, options);
     const token = getAuthToken();
     if (!token) {
         if (typeof window !== 'undefined') {
@@ -43,8 +42,6 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
         'Authorization': `Bearer ${token}`,
         ...options.headers,
     };
-
-    console.log('headers', headers);
 
     try {
         const response = await fetch(url, {

@@ -1,5 +1,5 @@
 export const metadata = {
-    title: 'Product Detail - Little Dimple`',
+    title: 'Product Detail`',
     description: 'Product Detail',
 }
 

@@ -3,7 +3,7 @@ import { CategoryList } from "@/features/product/components/category.list";
 import { SortListSelect } from "@/features/product/components/sort.list.select";
 
 export const metadata = {
-    title: 'Products - Little Dimple`',
+    title: 'Products',
     description: 'Products',
 }
 

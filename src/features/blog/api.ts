@@ -18,3 +18,9 @@ export const getPostBySlug = async (category: string, slug: string) => {
     const data = await res.json()
     return data
 }
+
+export const getLatestPostsByCategory = async (category: string) => {
+    const res = await fetch(`/api/blog/${category}?popular=true`)
+    const data = await res.json()
+    return data
+}

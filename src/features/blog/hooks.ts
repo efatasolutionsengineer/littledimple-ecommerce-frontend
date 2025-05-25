@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import { getCategories, getPostsByCategory, getPostBySlug } from "./api"
+import { getCategories, getPostsByCategory, getPostBySlug, getLatestPostsByCategory } from "./api"
 import { BlogArticle } from "./types"
 
 export const useGetCategories = () => useQuery({
@@ -21,5 +21,12 @@ export const useGetPostsByCategory = (category: string, limit: number = 10) => u
 
 export const useGetPostBySlug = (category: string, slug: string) => useQuery({
     queryKey: ['post', category, slug],
-    queryFn: () => getPostBySlug(category, slug)
+    queryFn: () => getPostBySlug(category, slug),
+    select: (data) => data.data as BlogArticle
+})
+
+export const useGetLatestPostsByCategory = (category: string) => useQuery({
+    queryKey: ['popularPosts', category],
+    queryFn: () => getLatestPostsByCategory(category),
+    select: (data) => data.data as BlogArticle[]
 })

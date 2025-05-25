@@ -1,9 +1,11 @@
 'use client'
 
+import { BasicLoading } from "@/shared/components/loading"
 import { useGetPostsByCategory } from "../hooks"
 import { BlogArticle } from "../types"
 import PostResumeCard from "./post.resume.card"
 import { ReactNode, useEffect, useRef, useState } from "react"
+import Error from "@/shared/components/error"
 
 interface PostsGroupProps {
     category: string
@@ -47,16 +49,11 @@ const PostsGroup = ({ category, limit = 3, cta = <></>, isInfinite = false }: Po
     }, [isObserverReady, isInfinite, fetchNextPage])
 
     if (isLoadingPosts && !posts) {
-        return <div className="py-3 px-2 my-2 w-full text-center text-white">
-            <div className="flex items-center gap-2 justify-center">
-                <div className="w-4 h-4 border-2 border-hijau-tua border-t-transparent rounded-full animate-spin"></div>
-                <p className="font-(family-name:--font-dm-sans) font-medium text-hijau-tua">Loading {category}...</p>
-            </div>
-        </div>
+        return <BasicLoading>Loading {category}...</BasicLoading>
     }
 
     if (isErrorPosts) {
-        return <div>Error: {errorPosts.message}</div>
+        return <Error>Error: {errorPosts.message}</Error>
     }
 
     return (
