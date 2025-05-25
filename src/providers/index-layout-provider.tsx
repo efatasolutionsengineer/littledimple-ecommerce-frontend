@@ -47,7 +47,7 @@ export function IndexLayoutProvider({
 const IndexLayoutComponent = ({ data }: { data: LayoutData }) => {
     return (
         <div className="h-[386px] bg-(--hijau-tua) relative flex items-center justify-center flex-col p-5 text-white">
-            <h3 className="text-[50px]">{data.title}</h3>
+            <h3 className="text-[50px] capitalize">{data.title}</h3>
             <p className="text-[20px] font-(family-name:--font-dm-sans) capitalize">Home / {data.slug}</p>
             <Image
                 className="absolute inset-x-0 bottom-0"
