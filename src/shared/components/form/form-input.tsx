@@ -1,8 +1,9 @@
+import { ReactNode } from "react";
 import { UseFormRegister, FieldValues, FieldErrors, Path } from "react-hook-form";
 
 interface FormInputProps<T extends FieldValues> {
     id: string;
-    label?: string;
+    label?: string | ReactNode;
     type?: string;
     placeholder?: string;
     register: UseFormRegister<T>;
