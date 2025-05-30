@@ -11,11 +11,11 @@ import kemchick from "@/assets/images/contact_us/kemchick.png"
 import suzana from "@/assets/images/contact_us/suzana.png"
 import babywise from "@/assets/images/contact_us/babywise.png"
 import qualis from "@/assets/images/contact_us/qualis.png"
-import whatsap from '../../../public/whatsapp.svg';
-import instagram from '../../../public/instagram.svg';
-import locationpin from '../../../public/location-pin 1.svg';
-import email from '../../../public/email.svg';
-import maps from '../../../public/Map.svg';
+import whatsap from '../../../../public/whatsapp.svg';
+import instagram from '../../../../public/instagram.svg';
+import locationpin from '../../../../public/location-pin 1.svg';
+import email from '../../../../public/email.svg';
+import maps from '../../../../public/Map.svg';
 
 const partners = [
   { src: electroniccity, alt: "Electronic City" },
