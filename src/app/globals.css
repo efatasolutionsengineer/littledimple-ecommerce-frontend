@@ -46,6 +46,8 @@
   --text-subtitle: var(--text-subtitle);
   --text-body: var(--text-body);
   --text-large: var(--text-large);
+
+  --color-gray-dashboard: #fafafa;
 }
 
 body {
