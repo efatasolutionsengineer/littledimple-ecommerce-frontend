@@ -15,6 +15,7 @@ interface CustomDatePickerProps {
   maxDate?: Date;
   showTimeSelect?: boolean;
   dateFormat?: string;
+  stripped?: boolean;
 }
 
 const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
@@ -27,6 +28,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   maxDate,
   showTimeSelect = false,
   dateFormat = "MM/dd/yyyy",
+  stripped = false,
 }) => {
   return (
     <div className="flex items-center gap-2 bg-white rounded-lg border border-gray-200 max-w-[400px] w-full">

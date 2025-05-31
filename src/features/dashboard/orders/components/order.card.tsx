@@ -8,7 +8,7 @@ import { useState } from "react";
 import OrderTable from "./order.table";
 import { Pagination } from "@/shared/components/pagination";
 
-const optionsOrderStatus = [
+export const optionsOrderStatus = [
     { label: "All", value: "all" },
     { label: "Packing", value: "packing" },
     { label: "Completed", value: "completed" },
@@ -63,9 +63,9 @@ export const OrderCard = () => {
     }
 
     return <div className="bg-white rounded-lg p-4 shadow-md my-8">
-        <div className="flex items-center justify-between rounded-lg pb-4">
+        <div className="flex items-center justify-between flex-col sm:flex-row gap-4 rounded-lg pb-4">
             <h3 className="text-lg font-bold">Order</h3>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-center gap-2">
                 <SearchInput onChange={setSearch} />
                 <Select icon={<FilterIcon />} options={optionsOrderStatus} onChange={handleChangeOrderStatus} defaultValue={orderStatus} />
                 <CustomDatePicker selected={date} onChange={setDate} dateFormat="dd/MM/yyyy" />

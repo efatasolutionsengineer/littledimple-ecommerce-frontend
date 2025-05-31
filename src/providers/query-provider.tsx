@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState, type ReactNode } from 'react';
 import { Toaster } from 'sonner';
 import { PopSlideProvider } from './popslide-provider';
+import { CenterPopupProvider } from './centerpopup-provider';
 
 export default function QueryProvider({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
@@ -23,7 +24,9 @@ export default function QueryProvider({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <PopSlideProvider>
-        {children}
+        <CenterPopupProvider>
+          {children}
+        </CenterPopupProvider>
       </PopSlideProvider>
       <Toaster richColors />
       <ReactQueryDevtools initialIsOpen={false} />

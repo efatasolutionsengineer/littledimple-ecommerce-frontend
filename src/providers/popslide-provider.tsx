@@ -36,13 +36,13 @@ export const PopSlideProvider = ({ children }: { children: ReactNode }) => {
     return (
         <PopSlideContext.Provider value={{ isOpen, content, openPopup, closePopup }}>
             {children}
-            {isOpen && 
-            <div className='fixed inset-0 bg-[#1A1A1A]/50 flex justify-end items-center z-50'>
-            <div
-                className={`fixed right-0 top-0 bottom-0 bg-white z-50 p-5 w-full sm:max-w-[30vw] max-h-[100vh] overflow-y-auto`}>
-                {content}
-            </div>
-            </div>}
+            {isOpen &&
+                <div className='fixed inset-0 bg-[#1A1A1A]/50 flex justify-end items-center z-50'>
+                    <div
+                        className={`fixed right-0 top-0 bottom-0 bg-white z-50 p-5 w-full sm:max-w-[30vw] max-h-[100vh] overflow-y-auto`}>
+                        {content}
+                    </div>
+                </div>}
         </PopSlideContext.Provider>
     );
 };

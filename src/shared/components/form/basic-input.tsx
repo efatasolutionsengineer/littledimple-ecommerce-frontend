@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { UseFormRegister, FieldValues, FieldErrors, Path } from "react-hook-form";
 
-interface FormInputProps<T extends FieldValues> {
+interface BasicInputProps<T extends FieldValues> {
     id: string;
     label?: string | ReactNode;
     type?: string;
@@ -15,7 +15,7 @@ interface FormInputProps<T extends FieldValues> {
     defaultValue?: string | number;
 }
 
-export default function FormInput<T extends FieldValues>({
+export const BasicInput = <T extends FieldValues>({
     id,
     label,
     type = "text",
@@ -27,13 +27,13 @@ export default function FormInput<T extends FieldValues>({
     className = "",
     containerClassName = "",
     defaultValue,
-}: FormInputProps<T>) {
+}: BasicInputProps<T>) => {
     const InputComponent = rows ? "textarea" : "input";
     const inputProps = {
         id,
         type,
         placeholder,
-        className: `w-full p-3 border border-gray-300 rounded-lg bg-neutral-white focus:outline-none focus:ring-2 focus:ring-hijau-tua ${className}`,
+        className: `w-full p-2 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-hijau-tua ${className}`,
         ...(rows && { rows }),
         ...register(name),
     };
