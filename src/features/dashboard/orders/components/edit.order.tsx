@@ -2,7 +2,6 @@
 import { OrderFormType, OrderSchema } from "../types";
 import { useForm, Resolver } from "react-hook-form";
 import Select from "@/shared/components/form/select";
-import { useState } from "react";
 import { BasicInput } from "@/shared/components/form/basic-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BasicDatePicker } from "@/shared/components/form/basic-datepicker";
@@ -21,7 +20,6 @@ export default function EditOrder({ order }: { order: OrderFormType }) {
         resolver: zodResolver(OrderSchema) as Resolver<OrderFormType>,
         defaultValues: order,
     })
-    const [orderStatus, setOrderStatus] = useState(order.order_status);
 
     const onSubmit = (data: OrderFormType) => {
         console.log(data)
@@ -63,7 +61,7 @@ export default function EditOrder({ order }: { order: OrderFormType }) {
                 <BasicInput label="Receipt no" name="receipt_no" id="receipt_no" defaultValue={order.receipt_no} register={form.register} />
                 <div className="col-span-3">
                     <label htmlFor="order_status" className="block mb-2">Order Status</label>
-                    <Select className="w-full py-2 max-w-full" options={optionsOrderStatus} defaultValue={orderStatus} icon={<></>} onChange={(e) => {
+                    <Select className="w-full py-2 max-w-full" options={optionsOrderStatus} defaultValue={order.order_status} icon={<></>} onChange={(e) => {
                         form.setValue("order_status", e.target.value)
                     }} />
                 </div>

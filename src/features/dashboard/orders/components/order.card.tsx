@@ -52,11 +52,11 @@ const orders = [
 ]
 
 export const OrderCard = () => {
-    const [search, setSearch] = useState("");
+    const [, setSearch] = useState("");
     const [orderStatus, setOrderStatus] = useState("all");
     const [date, setDate] = useState<Date | null>(new Date());
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(10);
+    const [totalPages,] = useState(10);
 
     const handleChangeOrderStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setOrderStatus(e.target.value);
