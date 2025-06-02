@@ -80,7 +80,7 @@ export default function EditVoucher({ voucher }: { voucher: VoucherFormType }) {
         setIsPercentage(newIsPercentage);
     };
 
-    return <div className="font-(family-name:--font-dm-sans) max-h-[90vh] overflow-y-auto">
+    return <div className="font-(family-name:--font-dm-sans) max-h-[90vh] overflow-y-auto px-1">
         <h3 className="text-2xl font-bold pt-4 pb-8 w-full bg-white sticky top-0 z-1">Form Voucher</h3>
         <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="flex flex-col sm:grid sm:grid-cols-3 gap-4 mb-4">

@@ -5,90 +5,61 @@ import CustomDatePicker from "@/shared/components/form/datepicker";
 import SearchInput from "@/shared/components/form/search-input";
 import Select from "@/shared/components/form/select";
 import { useState } from "react";
-import ProductTable from "./product.table";
+import FormTable from "./form.table";
 import { Pagination } from "@/shared/components/pagination";
-import { Product } from "../types";
+import { Form } from "../types";
 
 export const optionsFilterData = [
     { label: "All", value: "all" },
     { label: "Name", value: "name" },
-    { label: "Variant", value: "variant" },
-    { label: "Code", value: "code" },
-    { label: "Barcode", value: "barcode" },
-    { label: "Stock", value: "stock" },
-    { label: "Price", value: "price" },
-    { label: "Weight", value: "weight" },
-    { label: "Size", value: "size" },
-    { label: "Label 1", value: "label_1" },
+    { label: "Receipt Number", value: "receipt_number" },
+    { label: "Phone Number", value: "phone_no" },
+    { label: "Email", value: "email" },
+    { label: "Address", value: "address" },
+    { label: "Attachment", value: "attachment" },
+    { label: "Description", value: "description" },
 ]
 
-const products: Product[] = [
+const forms: Form[] = [
     {
         id: "1",
         name: "Product 1",
-        variant: "Variant 1",
-        code: "1234567890",
-        barcode: "1234567890",
-        stock: 10,
-        price: 100000,
-        weight: 100,
-        size: "100x100",
-        label_1: "Label 1",
-        label_2: "Label 2",
+        receipt_number: "1234567890",
+        phone_no: "1234567890",
+        email: "1234567890",
+        address: "1234567890",
+        attachment: "1234567890",
         description: "Description",
-        more_info: "More Info",
-        category: "Category",
-        sold: 10,
-        rating: 5,
+        notes: "Notes rq",
         created_at: "2021-01-01",
-        updated_at: "2021-01-01",
-        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop",
     },
     {
         id: "2",
         name: "Product 2",
-        variant: "Variant 2",
-        code: "1234567890",
-        barcode: "1234567890",
-        stock: 10,
-        price: 100000,
-        weight: 100,
-        size: "100x100",
-        label_1: "Label 1",
-        label_2: "Label 2",
+        receipt_number: "1234567890",
+        phone_no: "1234567890",
+        email: "1234567890",
+        address: "1234567890",
+        attachment: "1234567890",
         description: "Description",
-        more_info: "More Info",
-        category: "Category",
-        sold: 10,
-        rating: 5,
+        notes: "Notes er2",
         created_at: "2021-01-01",
-        updated_at: "2021-01-01",
-        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop",
     },
     {
         id: "3",
         name: "Product 3",
-        variant: "Variant 3",
-        code: "1234567890",
-        barcode: "1234567890",
-        stock: 10,
-        price: 100000,
-        weight: 100,
-        size: "100x100",
-        label_1: "Label 1",
-        label_2: "Label 2",
+        receipt_number: "1234567890",
+        phone_no: "1234567890",
+        email: "1234567890",
+        address: "1234567890",
+        attachment: "1234567890",
         description: "Description",
-        more_info: "More Info",
-        category: "Category",
-        sold: 10,
-        rating: 5,
+        notes: "Notes",
         created_at: "2021-01-01",
-        updated_at: "2021-01-01",
-        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop",
     }
 ]
 
-export const ProductCard = () => {
+export const FormCard = () => {
     const [, setSearch] = useState("");
     const [productFilter, setProductFilter] = useState("all");
     const [date, setDate] = useState<Date | null>(new Date());
@@ -109,7 +80,7 @@ export const ProductCard = () => {
             </div>
         </div>
         <div className="flex flex-col gap-4">
-            <ProductTable products={products} />
+            <FormTable forms={forms} />
             <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
         </div>
     </div>
