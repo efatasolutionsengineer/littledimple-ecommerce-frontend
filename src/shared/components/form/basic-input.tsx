@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ChangeEventHandler, ReactNode } from "react";
 import { UseFormRegister, FieldValues, FieldErrors, Path } from "react-hook-form";
 
 interface BasicInputProps<T extends FieldValues> {
@@ -13,6 +13,10 @@ interface BasicInputProps<T extends FieldValues> {
     className?: string;
     containerClassName?: string;
     defaultValue?: string | number;
+    value?: string | number;
+    disabled?: boolean;
+    isCurrency?: boolean;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const BasicInput = <T extends FieldValues>({
@@ -27,15 +31,46 @@ export const BasicInput = <T extends FieldValues>({
     className = "",
     containerClassName = "",
     defaultValue,
+    value,
+    disabled = false,
+    isCurrency = false,
+    onChange,
 }: BasicInputProps<T>) => {
     const InputComponent = rows ? "textarea" : "input";
+    
+    const formatCurrency = (value: string | number) => {
+        if (!value) return "";
+        const number = typeof value === "string" ? parseFloat(value.replace(/[^\d]/g, "")) : value;
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }).format(number);
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (isCurrency) {
+            const rawValue = e.target.value.replace(/[^\d]/g, "");
+            e.target.value = rawValue;
+        }
+        onChange?.(e);
+    };
+
     const inputProps = {
         id,
-        type,
+        type: isCurrency ? "text" : type,
         placeholder,
-        className: `w-full p-2 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-hijau-tua ${className}`,
+        className: `w-full p-2 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-hijau-tua disabled:bg-gray-200 disabled:text-gray-500 font-normal ${className}`,
         ...(rows && { rows }),
-        ...register(name),
+        ...register(name, {
+            onChange: (e) => {
+                if (isCurrency) {
+                    const rawValue = e.target.value.replace(/[^\d]/g, "");
+                    e.target.value = rawValue;
+                }
+            },
+        }),
     };
 
     return (
@@ -45,7 +80,12 @@ export const BasicInput = <T extends FieldValues>({
                     {label}
                 </label>
             )}
-            <InputComponent {...inputProps} />
+            <InputComponent 
+                {...inputProps} 
+                value={isCurrency && value ? formatCurrency(value) : value} 
+                disabled={disabled}
+                onChange={handleChange as ChangeEventHandler<HTMLInputElement> & ChangeEventHandler<HTMLTextAreaElement>}
+            />
             {errors?.[name] && (
                 <p className="text-red-500 text-sm mt-1">
                     {errors[name]?.message as string}

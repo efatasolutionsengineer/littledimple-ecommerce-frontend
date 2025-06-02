@@ -95,7 +95,7 @@ export const ProductCard = () => {
 
     return <div className="bg-white rounded-lg p-4 shadow-md my-8">
         <div className="flex items-center justify-between flex-col sm:flex-row gap-4 rounded-lg pb-4">
-            <h3 className="text-lg font-bold">Order</h3>
+            <h3 className="text-lg font-bold">Product</h3>
             <div className="flex flex-col sm:flex-row items-center gap-2">
                 <SearchInput onChange={setSearch} />
                 <Select icon={<FilterIcon />} options={optionsOrderStatus} onChange={handleChangeOrderStatus} defaultValue={productFilter} />
