@@ -2,11 +2,11 @@ import { Metadata } from "next";
 import { ReactNode } from "react";
 
 export const metadata: Metadata = {
-    title: "User - Dashboard",
-    description: "User",
+    title: "Voucher - Dashboard",
+    description: "Voucher",
 };
 
-export default function UserLayout({
+export default function VoucherLayout({
     children,
 }: {
     children: ReactNode;

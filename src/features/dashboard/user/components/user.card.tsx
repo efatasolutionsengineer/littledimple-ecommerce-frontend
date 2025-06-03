@@ -5,82 +5,85 @@ import CustomDatePicker from "@/shared/components/form/datepicker";
 import SearchInput from "@/shared/components/form/search-input";
 import Select from "@/shared/components/form/select";
 import { useState } from "react";
-import FormTable from "./form.table";
 import { Pagination } from "@/shared/components/pagination";
-import { Form } from "../types";
+import { User } from "../types";
+import UserTable from "./user.table";
 
 export const optionsFilterData = [
     { label: "All", value: "all" },
     { label: "Name", value: "name" },
-    { label: "Receipt Number", value: "receipt_number" },
-    { label: "Phone Number", value: "phone_no" },
     { label: "Email", value: "email" },
+    { label: "Phone Number", value: "phone_number" },
+    { label: "Gender", value: "gender" },
+    { label: "Birthday", value: "birthday" },
     { label: "Address", value: "address" },
-    { label: "Attachment", value: "attachment" },
-    { label: "Description", value: "description" },
 ]
 
-const forms: Form[] = [
+const users: User[] = [
     {
         id: "1",
-        name: "Product 1",
-        receipt_number: "1234567890",
-        phone_no: "1234567890",
-        email: "1234567890",
-        address: "1234567890",
-        attachment: "1234567890",
-        description: "Description",
-        notes: "Notes rq",
-        created_at: "2021-01-01",
+        role: "Admin",
+        name: "Jhon Em",
+        email: "jhon@gmail.com",
+        phone_number: "081234567890",
+        gender: "Male",
+        birthday: "12/08/1990",
+        address: "Jl. Raya No. 123",
     },
     {
         id: "2",
-        name: "Product 2",
-        receipt_number: "1234567890",
-        phone_no: "1234567890",
-        email: "1234567890",
-        address: "1234567890",
-        attachment: "1234567890",
-        description: "Description",
-        notes: "Notes er2",
-        created_at: "2021-01-01",
+        role: "Admin",
+        name: "Malik Surya",
+        email: "malik@gmail.com",
+        phone_number: "081234567890",
+        gender: "Male",
+        birthday: "12/04/1990",
+        address: "Jl. Raya No. 123",
     },
     {
         id: "3",
-        name: "Product 3",
-        receipt_number: "1234567890",
-        phone_no: "1234567890",
-        email: "1234567890",
-        address: "1234567890",
-        attachment: "1234567890",
-        description: "Description",
-        notes: "Notes",
-        created_at: "2021-01-01",
+        role: "Admin",
+        name: "Malik Surya",
+        email: "malik@gmail.com",
+        phone_number: "081234567890",
+        gender: "Male",
+        birthday: "12/08/1990",
+        address: "Jl. Raya No. 123",
+    },
+    {
+        id: "4",
+        role: "Admin",
+        name: "Korin",
+        email: "korin@gmail.com",
+        phone_number: "081234567890",
+        gender: "Male",
+        birthday: "12/08/1990",
+        address: "Jl. Raya No. 123",
     }
 ]
 
-export const FormCard = () => {
+export const UserCard = () => {
     const [, setSearch] = useState("");
-    const [formFilter, setFormFilter] = useState("all");
+    const [userFilter, setUserFilter] = useState("all");
     const [date, setDate] = useState<Date | null>(new Date());
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages,] = useState(10);
 
     const handleChangeOrderStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setFormFilter(e.target.value);
+        setUserFilter(e.target.value);
     }
 
     return <div className="bg-white rounded-lg p-4 shadow-md my-8">
         <div className="flex items-center justify-between flex-col sm:flex-row gap-4 rounded-lg pb-4">
-            <h3 className="text-lg font-bold">Form</h3>
+            <h3 className="text-lg font-bold">User</h3>
             <div className="flex flex-col sm:flex-row items-center gap-2">
                 <SearchInput onChange={setSearch} />
-                <Select icon={<FilterIcon />} options={optionsFilterData} onChange={handleChangeOrderStatus} defaultValue={formFilter} />
+                <Select icon={<FilterIcon />} options={optionsFilterData} onChange={handleChangeOrderStatus} defaultValue={userFilter} />
                 <CustomDatePicker selected={date} onChange={setDate} dateFormat="dd/MM/yyyy" />
             </div>
         </div>
         <div className="flex flex-col gap-4">
-            <FormTable forms={forms} />
+            <UserTable users={users} />
             <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
         </div>
     </div>

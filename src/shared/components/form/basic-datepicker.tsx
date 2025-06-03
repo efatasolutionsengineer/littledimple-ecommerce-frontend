@@ -2,8 +2,6 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { cn } from '@/lib/utils';
-import CalendarIcon from '@/assets/icons/calendar';
-import { ChevronDown } from '@/assets/icons/chevron';
 
 interface CustomDatePickerProps {
     selected: Date | null;
@@ -15,7 +13,7 @@ interface CustomDatePickerProps {
     maxDate?: Date;
     showTimeSelect?: boolean;
     dateFormat?: string;
-    stripped?: boolean;
+    containerClassName?: string;
 }
 
 export const BasicDatePicker: React.FC<CustomDatePickerProps> = ({
@@ -28,10 +26,10 @@ export const BasicDatePicker: React.FC<CustomDatePickerProps> = ({
     maxDate,
     showTimeSelect = false,
     dateFormat = "MM/dd/yyyy",
-    stripped = false,
+    containerClassName,
 }) => {
     return (
-        <div className="p-2 bg-gray-100 rounded-lg border border-gray-300 max-w-[400px] w-full">
+        <div className={cn("p-2 bg-gray-100 rounded-lg border border-gray-300 max-w-[400px] w-full", containerClassName)}>
             <DatePicker
                 selected={selected}
                 onChange={onChange}

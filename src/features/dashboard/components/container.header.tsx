@@ -7,7 +7,7 @@ export type Breadcrumb = {
 }
 
 export const ContainerHeader = ({ title, breadcrumbs }: { title: string, breadcrumbs: Breadcrumb[] }) => {
-    return <div>
+    return <div className="mx-4 sm:mx-0">
         <h2 className="text-2xl font-bold mb-2 capitalize">{title}</h2>
         <div className="flex items-center gap-2">
             {breadcrumbs.map((breadcrumb, index) => (
