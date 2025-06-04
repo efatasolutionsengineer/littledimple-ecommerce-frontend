@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, DM_Sans, Urbanist, Schoolbell } from "next/font/google";
+import { Geist, Geist_Mono, DM_Sans, Urbanist, Schoolbell, Poppins } from "next/font/google";
 import '@fontsource/fredoka-one';
 import "./globals.css";
 import QueryProvider from "@/providers/query-provider";
@@ -31,6 +31,12 @@ const schoolbell = Schoolbell({
   weight: "400"
 });
 
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
   title: "Little Dimple",
   description: "Little Dimple - Your Trusted Baby Care Partner",
@@ -44,7 +50,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${dmSans.variable} ${urbanist.variable} ${schoolbell.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${dmSans.variable} ${urbanist.variable} ${schoolbell.variable} ${poppins.variable} antialiased`}
         style={{ fontFamily: 'Fredoka One, cursive' }}>
           <QueryProvider>
             <AuthProvider>

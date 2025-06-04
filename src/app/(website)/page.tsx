@@ -15,9 +15,6 @@ import mid2 from "@/assets/images/home/mid2.png";
 import mid3 from "@/assets/images/home/mid3.png";
 import mid4 from "@/assets/images/home/mid4.png";
 import hotProductbg from '@/assets/images/home/hotProductbg.png';
-import homemid1 from '../../../public/homemid1.svg';
-import homemid2 from '../../../public/homemid2.svg';
-import homemid3 from '../../../public/homemid3.svg';
 import nextButton from '../../../public/nextButton.svg';
 import previousButton from '../../../public/prevButton.svg';
 import startRating from '../../../public/StarRating.svg';
@@ -26,18 +23,11 @@ import hotProduct2 from "@/assets/images/dimple_squad/activity4.png"
 import hotProduct3 from "@/assets/images/dimple_squad/activity8.png"
 import hotProduct4 from "@/assets/images/dimple_squad/activity3.png"
 import hotProduct5 from "@/assets/images/dimple_squad/activity6.png"
-import babyImage from "@/assets/images/home/babyimage.png"
 import bgBaby from "@/assets/images/home/bgbaby.png"
 import linebgBaby from "@/assets/images/home/linebgbaby.png"
 import lamp from "@/assets/images/home/lamp.png"
 import letterb from "@/assets/images/home/letterb.png"
 import feedbackImg from "@/assets/images/home/feedbackimg.png"
-import electroniccity from "@/assets/images/contact_us/electroniccity.png"
-import lila from "@/assets/images/contact_us/lila.png"
-import kemchick from "@/assets/images/contact_us/kemchick.png"
-import suzana from "@/assets/images/contact_us/suzana.png"
-import babywise from "@/assets/images/contact_us/babywise.png"
-import qualis from "@/assets/images/contact_us/qualis.png"
 import homecontact from "@/assets/images/home/homecontact.png"
 import homecontact2 from "@/assets/images/home/homecontact2.png"
 import homecontact3 from "@/assets/images/home/homecontact3.png"
@@ -50,6 +40,8 @@ import homedot from "@/assets/images/home/homedot.png"
 import homeco1 from "@/assets/images/home/homco1.png"
 import homeco2 from "@/assets/images/home/homeco2.png"
 import homeco3 from "@/assets/images/home/homeco3.png"
+import { SuperiorityGroup } from "@/features/home/components/superiority.group";
+import { PartnerGroup } from "@/features/home/components/partner.group";
 
 // Objects
 
@@ -85,16 +77,6 @@ const feedbackCust = [
   { src: feedbackImg, name: "Dylan Neranda", date: "20 Mar, 2023 . 4:00 Pm", star: 2, message: "Nam vel lacus eu nisl bibendum accumsan vitae vitae nibh. Nam nec eros id magna hendrerit sagittis. Nullam sed mi non odio feugiat volutpat sit amet nec elit. Maecenas id hendrerit ipsum. Sed eget auctor metus, ac dapibus dolor. Nam vel lacus eu nisl bibendum accumsan" },
   { src: feedbackImg, name: "Dylan Neranda", date: "20 Mar, 2023 . 4:00 Pm", star: 4, message: "Nam vel lacus eu nisl bibendum accumsan vitae vitae nibh. Nam nec eros id magna hendrerit sagittis. Nullam sed mi non odio feugiat volutpat sit amet nec elit. Maecenas id hendrerit ipsum. Sed eget auctor metus, ac dapibus dolor. Nam vel lacus eu nisl bibendum accumsan" },
 ]
-
-const partners = [
-  { src: electroniccity, alt: "Electronic City" },
-  { src: babywise, alt: "Babywise" },
-  { src: kemchick, alt: "Kemchick" },
-  { src: lila, alt: "Lila" },
-  { src: qualis, alt: "Qualis" },
-  { src: suzana, alt: "Suzana" },
-];
-
 
 export default function Home() {
   // Functions
@@ -263,47 +245,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="w-full h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[26px] pt-20 pb-0 md:pb-20 px-10 md:px-30">
-          <div className="rounded-2xl shadow-none max-w-[379px] h-[158px] flex items-center justify-center" style={{ backgroundColor: 'rgba(46,174,172,0.2)' }}>
-            <div className="text-center">
-              <Image
-                src={homemid1}
-                alt="homemid1 icon"
-                width={40}
-                height={40}
-                className="mx-auto mb-2"
-              />
-              <p className="text-[#2EAEAC] px-1 text-[12px] md:text-[14px] lg:text-[16px]">FAST & SECURE DELIVERY</p>
-              <p className="text-[#727272] px-1 text-[10px] md:text-[12px] lg:text-[14px] font-(family-name:--font-dm-sans)">Reliable shipping you can</p>
-              <p className="text-[#727272] px-1 text-[10px] md:text-[12px] lg:text-[14px] font-(family-name:--font-dm-sans)">count on — always on time.</p></div>
-          </div>
-          <div className="rounded-2xl shadow-none max-w-[379px] h-[158px] flex items-center justify-center" style={{ backgroundColor: 'rgba(242, 83, 52, 0.2)' }}>
-            <div className="text-center">
-              <Image
-                src={homemid2}
-                alt="homemid2 icon"
-                width={40}
-                height={40}
-                className="mx-auto mb-2"
-              />
-              <p className="text-[#F25334] px-1 text-[12px] md:text-[14px] lg:text-[16px]">TRUSTED</p>
-              <p className="text-[#727272] px-1 text-[10px] md:text-[12px] lg:text-[14px] font-(family-name:--font-dm-sans)">Loved and recommended by</p>
-              <p className="text-[#727272] px-1 text-[10px] md:text-[12px] lg:text-[14px] font-(family-name:--font-dm-sans)">parents all over Indonesia.</p></div>
-          </div>
-          <div className="rounded-2xl shadow-none max-w-[379px] h-[158px] flex items-center justify-center" style={{ backgroundColor: 'rgba(117, 193, 55, 0.2)' }}>
-            <div className="text-center">
-              <Image
-                src={homemid3}
-                alt="homemid3 icon"
-                width={40}
-                height={40}
-                className="mx-auto mb-2"
-              />
-              <p className="text-[#75C137] px-1 text-[12px] md:text-[14px] lg:text-[16px]">CERTIFIED BY LAB</p>
-              <p className="text-[#727272] px-1 text-[10px] md:text-[12px] lg:text-[14px] font-(family-name:--font-dm-sans)">Only the softest, safest fabrics</p>
-              <p className="text-[#727272] px-1 text-[10px] md:text-[12px] lg:text-[14px] font-(family-name:--font-dm-sans)">for your little one.</p></div>
-          </div>
-        </div>
+        <SuperiorityGroup />
 
         <div className="px-2 sm:px-10 md:px-20 lg:px-30">
           <div className="w-full h-[200px] relative flex items-center justify-center">
@@ -448,12 +390,16 @@ export default function Home() {
               height={400}
               className="absolute -top-10 right-5 w-[70%] sm:w-[80%] md:w-[85%]"
             />
-            <Image
-              src={babyImage}
-              alt="Baby Image"
-              width={410}
-              className="absolute top-12 right-10 w-[75%] sm:w-[80%]"
-            />
+            <div className="absolute top-0 right-30 max-w-[300px] max-h-[600px] h-full">
+              <video 
+                className="w-full h-full object-cover rounded-lg"
+                controls
+                style={{aspectRatio: "9/16"}}
+              >
+                <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
             <Image
               src={letterb}
               alt="letterb Icon"
@@ -527,18 +473,7 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <label className="text-[30px] text-[#86CCCB] text-center pt-10">Partnerts</label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5 px-4 sm:px-20 md:px-40 py-6">
-          {partners.map((item, index) => (
-            <div key={index} className="flex items-center justify-center">
-              <Image
-                src={item.src}
-                alt={item.alt}
-                className="max-h-15 object-contain"
-              />
-            </div>
-          ))}
-        </div>
+        <PartnerGroup />
         <div className="w-full h-[300px] sm:h-[600px] md:h-[700px] relative">
           <Image
             src={homecontact4}
