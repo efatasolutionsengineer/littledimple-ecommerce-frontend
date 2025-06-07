@@ -18,18 +18,19 @@ const partners = [
 ];
 
 export const PartnerGroup = () => {
-    return (<>
-        <label className="text-[30px] text-[#86CCCB] text-center mt-16 mb-8">Partnerts</label>
+    return (<div className="text-center my-32">
+        <p className="text-[30px] text-[#86CCCB] text-center mb-8">Partners</p>
         <div className="flex flex-row flex-wrap justify-center items-center gap-8">
             {partners.map((item, index) => (
-                    <Image
-                        src={item.src}
-                        alt={item.alt}
-                        key={index}
-                        width={100}
-                        className="max-h-15 object-contain"
-                    />
+                <Image
+                    src={item.src}
+                    alt={item.alt}
+                    key={index}
+                    width={150}
+                    className="max-h-15 object-contain"
+                />
             ))}
         </div>
-    </>)
+    </div>
+    )
 }

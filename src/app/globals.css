@@ -30,6 +30,8 @@
   --orange: #F25334;
   --teal: #2EAEAC;
   --gray: #727272;
+  --yellow: #FFAA23;
+  --biru: #2390FF;
 
   --font-poppins: "Poppins", sans-serif;
 }
@@ -45,8 +47,10 @@
   --color-tertiary-gray: var(--tertiary-gray);
   --color-hijau-tua: var(--hijau-tua);
   --color-hijau-muda: var(--hijau-muda);
+
   --color-primary-hijau: var(--primary-hijau);
   --color-primary-ungu: var(--primary-ungu);
+  
   --color-neutral-1: var(--neutral-1);
   --color-orange-muda: var(--orange-muda);
   --color-primary-ungu: var(--primary-ungu);
@@ -69,6 +73,11 @@
   --color-orange: var(--orange);
   --color-teal: var(--teal);
   --color-gray: var(--gray);
+  --color-orange: var(--primary);
+  --color-yellow: var(--yellow);
+  --color-biru: var(--biru);
+  
+  --color-gray-text: var(--semiblack-text);
 
   --font-poppins: var(--font-poppins);
   --font-dm-sans: var(--font-dm-sans);

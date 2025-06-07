@@ -1,3 +1,5 @@
+import { ProductResponse } from "./types";
+
 export const getProducts = async (params: {
     sort_by?: string;
     category?: string;
@@ -45,7 +47,7 @@ export const getProductReviews = async (id: string, params?: {
     limit?: number;
 }) => {
     const url = new URL(`/api/product-review/${id}`, process.env.NEXT_PUBLIC_API_URL);
-    
+
     if (params?.page) {
         url.searchParams.set('page', params.page.toString());
     }
@@ -55,6 +57,37 @@ export const getProductReviews = async (id: string, params?: {
     }
 
     const response = await fetch(url.toString());
+    const data = await response.json();
+    return data;
+};
+
+export const getListProducts = async ({
+    page = 1,
+    limit = 10,
+    sort_by = 'newest',
+    mode,
+}: {
+    page?: number;
+    limit?: number;
+    sort_by?: 'newest' | 'price_asc' | 'price_desc' | 'popular';
+    mode?: 'new' | 'hot';
+}): Promise<ProductResponse> => {
+    const url = new URL(`/api/products${mode ? `/${mode}` : ''}`, process.env.NEXT_PUBLIC_API_URL);
+
+    if (page) {
+        url.searchParams.set('page', page.toString());
+    }
+
+    if (limit) {
+        url.searchParams.set('limit', limit.toString());
+    }
+
+    if (sort_by) {
+        url.searchParams.set('sort_by', sort_by);
+    }
+
+    const response = await fetch(url.toString());
+    console.log(url.toString());
     const data = await response.json();
     return data;
 };

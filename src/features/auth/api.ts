@@ -31,7 +31,7 @@ export const postRegister = async (data: {
     body: JSON.stringify(data),
 });
 
-export const validateToken = async (token: string) => fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/validate-token`, {
+export const validateToken = async (token: string) => fetch(`/users/validate-token`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',

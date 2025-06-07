@@ -34,3 +34,13 @@ export const submitCheckout = async (checkoutData: CheckoutData) => {
     const data = await response.json();
     return data;
 };
+
+export const addProductToCart = async (productId: number, quantity: number) => {
+    const url = new URL(`/api/cart`, process.env.NEXT_PUBLIC_API_URL);
+    const response = await fetchWithAuth(url.toString(), {
+        method: 'POST',
+        body: JSON.stringify({ product_id: productId, quantity }),
+    });
+    const data = await response.json();
+    return data;
+};

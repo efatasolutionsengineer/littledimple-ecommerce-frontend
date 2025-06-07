@@ -61,3 +61,10 @@ export const checkoutSchema = z.object({
 });
 
 export type CheckoutFormType = z.infer<typeof checkoutSchema>;
+
+export const cartSchema = z.object({
+    product_id: z.number().min(1, "Product ID is required"),
+    quantity: z.number().min(1, "Quantity is required"),
+});
+
+export type CartFormType = z.infer<typeof cartSchema>;

@@ -1,3 +1,5 @@
+'use client'
+
 import Image from "next/image";
 import BGFooter from "@/assets/images/bg-footer.png";
 import BrandLogo from "@/assets/images/brand-logo.png";
@@ -8,20 +10,19 @@ import WaIcon from "@/assets/images/wa.png";
 import IgIcon from "@/assets/images/ig.png";
 import TokpedIcon from "@/assets/images/tokped.png";
 import ShopeeIcon from "@/assets/images/shopee.png";
-import Link from "next/link";
-import BCAIcon from "@/assets/images/bca.png";
-import BRIVAIcon from "@/assets/images/briva.png";
-import MandiriIcon from "@/assets/images/mandiri.png";
-import GopayIcon from "@/assets/images/gopay.png";
-import PermataIcon from "@/assets/images/permata.png";
-import QRISIcon from "@/assets/images/qris.png";
 import MobilFooter from "@/assets/images/mobil-footer.png";
 import StarFooter from "@/assets/images/star-footer.png";
 import PesawatFooter from "@/assets/images/pesawat-footer.png";
 import KuasFooter from "@/assets/images/kuas-footer.png";
+import { useGetHome } from "@/features/home/hooks";
+import { LoadDataUntilReady } from "@/shared/components/load.data.until.ready";
+import { Explore } from "./components/explore";
+import { AvailablePayments } from "./components/available.payments";
 
 export const Footer = () => {
-	return <div className="relative">
+    const { data: home, isLoading } = useGetHome();
+
+    return <div className="relative">
         <Image src={BGFooter} alt="background footer" className="w-full h-full absolute inset-0 z-0" />
         <Image src={MobilFooter} height={90} alt="mobil decoration" className="hidden md:block absolute top-35 left-20" />
         <Image src={StarFooter} height={60} alt="star decoration" className="hidden md:block absolute bottom-30 left-10" />
@@ -37,7 +38,12 @@ export const Footer = () => {
                         width={20}
                         height={20}
                     />
-                    <p>Ruko Sunter Permai Blok K2 D7, Sunter Jaya, Tanjung Priok, Jakarta Utara</p>
+                    <LoadDataUntilReady
+                        isLoading={isLoading}
+                        placeholder={<p className="p-8 w-64 bg-white/10 rounded-lg animate-pulse"></p>}
+                    >
+                        {home?.alamat ? <p>{home?.alamat}</p> : <p>Ruko Sunter Permai Blok K2 D7, Sunter Jaya, Tanjung Priok, Jakarta Utara</p>}
+                    </LoadDataUntilReady>
                 </div>
                 <div className="flex items-center gap-5 mb-4">
                     <Image
@@ -46,7 +52,12 @@ export const Footer = () => {
                         width={20}
                         height={20}
                     />
-                    <p>(+62) 821 2266 8696</p>
+                    <LoadDataUntilReady
+                        isLoading={isLoading}
+                        placeholder={<p className="p-4 w-64 bg-white/10 rounded-lg animate-pulse"></p>}
+                    >
+                        {home?.no_telepon ? <p>{home?.no_telepon}</p> : <p>(+62) 821 2266 8696</p>}
+                    </LoadDataUntilReady>
                 </div>
                 <div className="flex items-center gap-5 mb-4">
                     <Image
@@ -55,10 +66,15 @@ export const Footer = () => {
                         width={20}
                         height={20}
                     />
-                    <a href="mailto:littledimpleid@gmail.com" target="_blank" rel="noopener noreferrer" className="hover:underline">littledimpleid@gmail.com</a>
+                    <LoadDataUntilReady
+                        isLoading={isLoading}
+                        placeholder={<p className="p-4 w-64 bg-white/10 rounded-lg animate-pulse"></p>}
+                    >
+                        <a href={`mailto:${home?.email}`} target="_blank" rel="noopener noreferrer" className="hover:underline block">littledimpleid@gmail.com</a>
+                    </LoadDataUntilReady>
                 </div>
                 <div className="flex items-center gap-5 py-3">
-                    <a href="#" target="_blank" rel="noopener noreferrer" className="hover:shadow-lg transition-all duration-300">
+                    <a href={home?.link_whatsapp || '#'} target="_blank" rel="noopener noreferrer" className="hover:shadow-lg transition-all duration-300">
                         <Image
                             src={WaIcon}
                             alt="whatsapp icon"
@@ -66,7 +82,7 @@ export const Footer = () => {
                             height={32}
                         />
                     </a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" className="hover:shadow-lg transition-all duration-300">
+                    <a href={home?.link_instagram || '#'} target="_blank" rel="noopener noreferrer" className="hover:shadow-lg transition-all duration-300">
                         <Image
                             src={IgIcon}
                             alt="instagram icon"
@@ -74,7 +90,7 @@ export const Footer = () => {
                             height={32}
                         />
                     </a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" className="hover:shadow-lg transition-all duration-300">
+                    <a href={home?.link_tokopedia || '#'} target="_blank" rel="noopener noreferrer" className="hover:shadow-lg transition-all duration-300">
                         <Image
                             src={TokpedIcon}
                             alt="tokopedia icon"
@@ -82,7 +98,7 @@ export const Footer = () => {
                             height={32}
                         />
                     </a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" className="hover:shadow-lg transition-all duration-300">
+                    <a href={home?.link_shopee || '#'} target="_blank" rel="noopener noreferrer" className="hover:shadow-lg transition-all duration-300">
                         <Image
                             src={ShopeeIcon}
                             alt="shopee icon"
@@ -93,31 +109,8 @@ export const Footer = () => {
                 </div>
             </div>
             <div className="flex gap-14 flex-wrap">
-                <div className="text-white w-full sm:w-auto">
-                    <h3 className="text-[24px] mb-5">Explore</h3>
-                    <ul className="font-(family-name:--font-dm-sans) text-[16px]">
-                        <li className="px-3 py-2 -ml-3 hover:bg-white/10 transition-all duration-300">
-                            <Link href={'/product'} className="w-full hover:underline block">Products</Link>
-                        </li>
-                        <li className="px-3 py-2 -ml-3 hover:bg-white/10 transition-all duration-300">
-                            <Link href={'/blog'} className="w-full hover:underline block">Blog</Link>
-                        </li>
-                        <li className="px-3 py-2 -ml-3 hover:bg-white/10 transition-all duration-300">
-                            <Link href={'/contact'} className="w-full hover:underline block">Contact Us</Link>
-                        </li>
-                    </ul>
-                </div>
-                <div className="text-white w-full sm:w-auto">
-                    <h3 className="text-[24px] mb-5">Available Payment Options</h3>
-                    <div className="grid grid-cols-3 gap-4">
-                        <div className="size-[76px] flex items-center justify-center rounded-lg bg-white hover:shadow-lg transition-all duration-300"><Image src={BCAIcon} alt="bca icon" width={64} /></div>
-                        <div className="size-[76px] flex items-center justify-center rounded-lg bg-white hover:shadow-lg transition-all duration-300"><Image src={BRIVAIcon} alt="briva icon" width={64} /></div>
-                        <div className="size-[76px] flex items-center justify-center rounded-lg bg-white hover:shadow-lg transition-all duration-300"><Image src={GopayIcon} alt="gopay icon" width={64} /></div>
-                        <div className="size-[76px] flex items-center justify-center rounded-lg bg-white hover:shadow-lg transition-all duration-300"><Image src={MandiriIcon} alt="mandiri icon" width={64} /></div>
-                        <div className="size-[76px] flex items-center justify-center rounded-lg bg-white hover:shadow-lg transition-all duration-300"><Image src={PermataIcon} alt="permata icon" width={64} /></div>
-                        <div className="size-[76px] flex items-center justify-center rounded-lg bg-white hover:shadow-lg transition-all duration-300"><Image src={QRISIcon} alt="qris icon" width={64} /></div>
-                    </div>
-                </div>
+                <Explore data={home?.explore} isLoading={isLoading} />
+                <AvailablePayments data={home?.available_payment} isLoading={isLoading} />
             </div>
         </div>
         <div className="max-w-[1050px] mx-auto px-2 z-10 relative">

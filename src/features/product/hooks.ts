@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getProductDetail, getProductReviews, getProducts } from "./api";
+import { getListProducts, getProductDetail, getProductReviews, getProducts } from "./api";
 
 export const useGetProducts = (params: {
     sort_by?: string;
@@ -28,5 +28,17 @@ export const useGetProductReviews = (id: string, params?: {
     return useQuery({
         queryKey: ['product-reviews', id, params],
         queryFn: () => getProductReviews(id, params),
+    });
+};
+
+export const useGetListProducts = (params: {
+    page?: number;
+    limit?: number;
+    mode?: 'new' | 'hot';
+    sort_by?: 'newest' | 'price_asc' | 'price_desc' | 'popular';
+}) => {
+    return useQuery({
+        queryKey: ['product-in-home', params],
+        queryFn: () => getListProducts(params),
     });
 };
