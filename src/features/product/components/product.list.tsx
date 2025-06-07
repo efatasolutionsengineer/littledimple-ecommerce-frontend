@@ -1,85 +1,92 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { useGetProducts } from "../hooks";
+import { useInfiniteListProduct } from "../hooks";
 import { Product } from "../types";
 import { ProductCard } from "./product.card";
+import { useAddProductToCart } from "@/features/cart/hooks";
+import { toast } from "sonner";
+import Error from "@/shared/components/error";
 
-export const ProductList = ({ category = "all"}: { category?: string}) => {
+export const ProductList = (
+    { category, limit = 10, isInfinite = false }:
+        { category?: string, limit?: number, isInfinite?: boolean }
+) => {
+    const { mutate: doAddProductToCart, isPending: isAddingProductToCart } = useAddProductToCart({
+        onSuccess: () => {
+            toast.success('Product added to cart');
+        },
+        onError: () => {
+            toast.error('Failed to add product to cart');
+        }
+    })
     const params = useSearchParams();
     const sortBy = params?.get('sort_by') || 'all';
     const searchParam = params?.get('search') || "";
-    const [page, setPage] = useState(1);
-    const [products, setProducts] = useState<Product[]>([]);
     const loaderRef = useRef<HTMLDivElement>(null);
 
-    const { data, isLoading, error } = useGetProducts({
+    const {
+        data: products,
+        isLoading: isLoadingProducts,
+        isSuccess,
+        isError: isErrorPosts,
+        error: errorPosts,
+        fetchNextPage,
+        isFetchingNextPage
+    } = useInfiniteListProduct({
         sort_by: sortBy,
-        category: category,
-        page: page,
-        limit: 10,
+        limit: limit,
         keyword: searchParam,
+        category: category,
     });
 
     useEffect(() => {
-        if (data?.data) {
-            setProducts(prev => [...prev, ...data.data]);
-        }
-    }, [data]);
-
-    // Reset products and page when search changes
-    useEffect(() => {
-        setProducts([]);
-        setPage(1);
-    }, [searchParam, category, sortBy]);
-
-    useEffect(() => {
+        if (!isInfinite || !loaderRef.current) return
         const observer = new IntersectionObserver(
             (entries) => {
-                if (entries[0].isIntersecting && !isLoading && data?.data?.length > 0) {
-                    setPage(prevPage => prevPage + 1);
+                if (entries[0].isIntersecting) {
+                    fetchNextPage()
                 }
             },
-            { threshold: 0.1 }
-        );
+            {
+                root: null,
+                rootMargin: '20px',
+                threshold: 0.1
+            }
+        )
 
-        if (loaderRef.current) {
-            observer.observe(loaderRef.current);
-        }
+        const currentRef = loaderRef.current
+        observer.observe(currentRef)
 
         return () => {
-            if (loaderRef.current) {
-                observer.unobserve(loaderRef.current);
-            }
-        };
-    }, [isLoading, data]);
+            observer.unobserve(currentRef)
+        }
+    }, [isInfinite, isLoadingProducts, isSuccess, fetchNextPage])
 
-    if (error) return <div>Error: {error.message}</div>;
+    if (isLoadingProducts && !products) {
+        return (
+            <div className="flex flex-wrap items-center justify-start gap-4">
+                <ProductCard isLoading={true} />
+                <ProductCard isLoading={true} />
+                <ProductCard isLoading={true} />
+            </div>)
+    }
+
+    if (isErrorPosts) {
+        return <Error>Error: {errorPosts.message}</Error>
+    }
 
     return (
-        <div className="grid grid-cols-3 gap-[26px]">
-            {products.length === 0 && !isLoading ? (
-                <div className="col-span-3 py-4 text-center">
-                    No products available
-                </div>
-            ) : (
-                <>
-                    {products.map((product: Product) => (
-                        <ProductCard key={product.id}
-                            image={product.photos[0].link}
-                            title={product.name}
-                            price={product.price}
-                            discountedPrice={product.price_after_discount}
-                            rating={product.rating}
-                            href={`/product/detail/${product.id}`}
-                        />
-                    ))}
-                    <div ref={loaderRef} className="col-span-3 py-4 text-center">
-                        {isLoading && <div>Loading more products...</div>}
-                    </div>
-                </>
-            )}
+        <div>
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
+                {products?.map((item: Product, index: number) => (
+                    <ProductCard key={index} item={item} inverCategory={index < 3 ? 'Hot' : 'New'} addProductToCart={() => doAddProductToCart({ product_id: item?.id, quantity: 1 })} isAddingProductToCart={isAddingProductToCart} useBorder={true} />
+                ))}
+            </div>
+            <span ref={loaderRef} className="block py-4 text-center bg-red">
+                {isFetchingNextPage && <p className="m-0">Loading more posts...</p>}
+            </span>
         </div>
     );
 };

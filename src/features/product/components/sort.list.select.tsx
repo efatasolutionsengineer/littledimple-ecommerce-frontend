@@ -20,8 +20,8 @@ export const SortListSelect = () => {
         >
             <option value="popular">Sort by Popularity</option>
             <option value="newest">Sort by Newest</option>
-            <option value="price low to high">Sort by Price Low to High</option>
-            <option value="price high to low">Sort by Price High to Low</option>
+            <option value="price_asc">Sort by Price Low to High</option>
+            <option value="price_desc">Sort by Price High to Low</option>
         </select>
     )
 }

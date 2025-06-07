@@ -1,60 +1,52 @@
 import Link from "next/link"
-import { toast } from "sonner";
-import { useAddToCart } from "@/features/cart/hooks";
+import { calculatePriceAfterDiscount, isDiscountNotExpired } from "../utils";
+import { cn } from "@/lib/utils";
+import { Product } from "../types";
+import { Rating } from "@/shared/components/rating";
 
-export const ProductCard = ({
-    image,
-    title,
-    price,
-    discountedPrice,
-    rating,
-    href,
-}: { image: string; title: string; price: string; discountedPrice: string; rating: number; href: string }) => {
-    
-    const { mutate: addToCart } = useAddToCart({
-        onSuccess: () => {
-            toast.success('Product added to cart successfully!');
-        },
-        onError: () => {
-            toast.error('Failed to add product to cart. Please try again.');
-        }
-    });
-    
+export const ProductCard = (
+    { item, isLoading, inverCategory, addProductToCart, isAddingProductToCart, useBorder }:
+    { item?: Product, isLoading?: boolean, inverCategory?: string, addProductToCart?: () => void, isAddingProductToCart?: boolean, useBorder?: boolean }) => {
+    const selectedCategory = inverCategory ? inverCategory : item?.category_name;
+
     return (
-        <div className="flex justify-between items-center flex-col border border-[#FCE9DD] rounded-lg p-6 bg-white w-auto text-center">
-            <div>
-                <div className="w-full aspect-square rounded-[10px] overflow-hidden mb-6 bg-neutral-gray">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                        src={image}
-                        alt={title}
-                        className="h-full w-full object-cover font-(family-name:--font-dm-sans)"
-                        loading="lazy"
-                    />
-                </div>
-                <h4 className="text-secondary text-[20px] mb-1">{title}</h4>
-                <p className="text-neutral-gray font-(family-name:--font-dm-sans) mb-1">${price} <span className="line-through">${discountedPrice}</span></p>
-                <div className="flex gap-1 items-center justify-center mb-6">
-                    {[...Array(5)].map((_, index) => (
-                        <svg
-                            key={index}
-                            className={`w-4 h-4 ${index < rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                        >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                    ))}
+        <div
+            className={cn(useBorder && "border border-orange-muda", "bg-white flex flex-col gap-3 px-5 py-5 rounded-xl")}
+        >
+            <div className="relative w-full aspect-square bg-gray-100 rounded-xl shadow-[0_4px_7px_#FFF3E6]">
+                { /* eslint-disable-next-line @next/next/no-img-element */}
+                {!isLoading ? <img src={item?.image_url} alt={item?.name} className="w-full object-cover font-poppins text-left text-sm" /> : <div className="size-52 bg-gray-200 animate-pulse rounded-xl" />}
+                <div className="absolute bottom-4 left-4 text-white flex flex-col gap-1 text-[10px]">
+                    <p className={cn( isLoading && 'animate-pulse w-16 h-6', selectedCategory === 'New' ? 'bg-yellow' : selectedCategory === 'Hot' ? 'bg-primary' : 'bg-hijau-tua', "px-3 py-1 rounded-[5px]")}>{selectedCategory}</p>
                 </div>
             </div>
-            <div className="flex justify-between items-center gap-2 font-(family-name:--font-dm-sans) text-[14px]">
-                <Link href={href} className="bg-neutral-white text-neutral-gray px-4 py-2 rounded-lg hover:bg-neutral-gray hover:text-neutral-white transition-all duration-300">Check More</Link>
-                <button
-                    className="bg-neutral-white text-neutral-gray px-4 py-2 rounded-lg hover:bg-neutral-gray hover:text-neutral-white transition-all duration-300"
-                    onClick={() => addToCart({ id: href, product_name: title, price: Number(price), quantity: 1, media_link: image })}
-                >
-                    Add to Cart
-                </button>
+
+            <div className="flex flex-col gap-2 justify-center items-center my-4">
+                {isLoading ? <div className="w-4/5 h-8 bg-gray-200 animate-pulse rounded-lg" /> : <label className="text-hijau-tua">{item?.name}</label>}
+
+                <div className="flex flex-row gap-3 font-dm-sans text-sm font-medium">
+                    {isLoading ? <div className="w-16 h-8 bg-gray-200 animate-pulse rounded-lg" /> : <p className="text-[#7E8185]">Rp {isDiscountNotExpired(item?.discount_expires_at ?? '') ? calculatePriceAfterDiscount(item?.price ?? '', item?.discount_percentage ?? '').toLocaleString('id-ID') : Number(item?.price).toLocaleString('id-ID')}</p>}
+                    {isLoading ? <div className="w-10 h-8 bg-gray-200 animate-pulse rounded-lg" /> : isDiscountNotExpired(item?.discount_expires_at ?? '') ? <p className="text-[#7E8185] line-through">
+                        Rp {Number(item?.price).toLocaleString('id-ID')}
+                    </p> : null}
+                </div>
+
+                {isLoading ? <div className="w-full h-16 bg-gray-200 animate-pulse rounded-xl" /> : <Rating score={Number(item?.rating) || 0} />}
+            </div>
+
+            <div className="flex flex-row gap-2 text-[#7E8185] font-dm-sans text-sm justify-center">
+                {isLoading ? <div className="w-full h-10 bg-gray-200 animate-pulse rounded-md" /> : <Link href={`/product/detail/${item?.slug}`} className="bg-[#FAF5F2] rounded-md px-4 py-2 cursor-pointer">
+                    Check More
+                </Link>}
+                {isLoading ? <div className="w-full h-10 bg-gray-200 animate-pulse rounded-md" /> : (
+                    <button
+                        className="bg-[#FAF5F2] rounded-md px-4 py-2 cursor-pointer"
+                        onClick={() => { console.log('addProductToCart'); addProductToCart?.() }}
+                        disabled={isAddingProductToCart}
+                    >
+                        {isAddingProductToCart ? <div className="w-4 h-4 animate-pulse bg-primary rounded-full" /> : 'Add to Cart'}
+                    </button>
+                )}
             </div>
         </div>
     )

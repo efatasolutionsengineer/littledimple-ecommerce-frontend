@@ -9,7 +9,7 @@ export const SearchProduct = () => {
 
     useEffect(() => {
         const delayDebounce = setTimeout(() => {
-            if (inputValue) {
+            if (inputValue || inputValue === "") {
                 const url = new URL(window.location.href);
                 url.searchParams.set('search', inputValue);
                 window.history.pushState({}, '', url);

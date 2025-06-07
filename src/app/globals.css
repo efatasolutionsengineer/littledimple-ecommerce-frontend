@@ -105,3 +105,8 @@ select.left-arrow {
 .wavy-top-custom {
   clip-path: polygon(0 0, 100% 0, 100% 20px, 75% 15px, 50% 20px, 25% 15px, 0 20px);
 }
+
+.slick-prev:before,
+.slick-next:before {
+  content: '' !important;
+}

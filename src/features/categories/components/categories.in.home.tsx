@@ -6,7 +6,8 @@ import { Category } from "../types";
 import Link from "next/link";
 
 export const CategoriesInHome = () => {
-    const { data, isLoading } = useCategoriesInHome();
+    const { data } = useCategoriesInHome();
+    const isLoading = true;
 
     return (
         <div className="my-32 relative">
@@ -23,14 +24,27 @@ export const CategoriesInHome = () => {
             {
                 isLoading
                     ? (
-                        <div
-                            className="w-full grid grid-cols-8 gap-2 flex-shrink-0 "
-                        >
+                        <div className="flex flex-wrap gap-8 items-center justify-center">
                             <div
-                                className="flex flex-col gap-5 text-center items-center bg-gray-100 animate-pulse w-full h-full cursor-pointer"
+
+                                className="text-center items-center cursor-pointer flex flex-col gap-2 justify-center items-center"
                             >
-                                <div className="w-[120px] md:w-[150px] bg-gray-100 animate-pulse" />
-                                <label className="text-[#86CCCB] font-semibold cursor-pointer bg-gray-100 animate-pulse w-full h-8 rounded-md"></label>
+                                <div className="size-26 bg-gray-200 animate-pulse" />
+                                <div className="text-hijau-tua text-lg font-semibold cursor-pointer bg-gray-200 animate-pulse w-32 h-8 rounded-md"></div>
+                            </div>
+                            <div
+
+                                className="text-center items-center cursor-pointer flex flex-col gap-2 justify-center items-center"
+                            >
+                                <div className="size-26 bg-gray-200 animate-pulse" />
+                                <div className="text-hijau-tua text-lg font-semibold cursor-pointer bg-gray-200 animate-pulse w-32 h-8 rounded-md"></div>
+                            </div>
+                            <div
+
+                                className="text-center items-center cursor-pointer flex flex-col gap-2 justify-center items-center"
+                            >
+                                <div className="size-26 bg-gray-200 animate-pulse" />
+                                <div className="text-hijau-tua text-lg font-semibold cursor-pointer bg-gray-200 animate-pulse w-32 h-8 rounded-md"></div>
                             </div>
                         </div>
                     )
@@ -39,13 +53,13 @@ export const CategoriesInHome = () => {
                             dots: true,
                             infinite: true,
                             speed: 500,
-                            slidesToShow: 4,
+                            slidesToShow: 6,
                             slidesToScroll: 1,
                             responsive: [
                                 {
                                     breakpoint: 1024,
                                     settings: {
-                                        slidesToShow: 3,
+                                        slidesToShow: 5,
                                         slidesToScroll: 3,
                                         infinite: true,
                                         dots: true
@@ -54,7 +68,7 @@ export const CategoriesInHome = () => {
                                 {
                                     breakpoint: 600,
                                     settings: {
-                                        slidesToShow: 2,
+                                        slidesToShow: 3,
                                         slidesToScroll: 2,
                                         initialSlide: 2
                                     }
@@ -62,7 +76,7 @@ export const CategoriesInHome = () => {
                                 {
                                     breakpoint: 480,
                                     settings: {
-                                        slidesToShow: 1,
+                                        slidesToShow: 2,
                                         slidesToScroll: 1
                                     }
                                 }
@@ -72,16 +86,14 @@ export const CategoriesInHome = () => {
                         {data?.categories.map((item: Category) => {
 
                             return (
-                                <div
-                                    key={item.id}
-                                    className="w-full grid grid-cols-8 gap-2"
-                                >
+                                <div key={item.id}>
                                     <div
-                                        className="flex flex-col gap-5 text-center items-center cursor-pointer"
+
+                                        className="text-center items-center cursor-pointer flex flex-col gap-2 justify-center items-center"
                                     >
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={`https://picsum.photos/150/150?random=${item.id}`} alt={item.name} className="w-[120px] md:w-[150px]" />
-                                        <Link href={`/product/category/${item.id}`} className="text-[#86CCCB] text-[10px] md:text-[15px] font-semibold cursor-pointer">{item.name}</Link>
+                                        <img src={`https://picsum.photos/150/150?random=${item.id}`} alt={item.name} className="size-26" />
+                                        <Link href={`/product/category/${item.id}`} className="text-hijau-tua text-lg font-semibold cursor-pointer">{item.name}</Link>
                                     </div>
                                 </div>
                             );

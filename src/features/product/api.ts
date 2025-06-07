@@ -65,12 +65,16 @@ export const getListProducts = async ({
     page = 1,
     limit = 10,
     sort_by = 'newest',
+    keyword,
     mode,
+    category,
 }: {
     page?: number;
     limit?: number;
-    sort_by?: 'newest' | 'price_asc' | 'price_desc' | 'popular';
+    sort_by?: string;
+    keyword?: string;
     mode?: 'new' | 'hot';
+    category?: string;
 }): Promise<ProductResponse> => {
     const url = new URL(`/api/products${mode ? `/${mode}` : ''}`, process.env.NEXT_PUBLIC_API_URL);
 
@@ -84,6 +88,14 @@ export const getListProducts = async ({
 
     if (sort_by) {
         url.searchParams.set('sort_by', sort_by);
+    }
+
+    if (keyword) {
+        url.searchParams.set('keyword', keyword)
+    }
+
+    if (category) {
+        url.searchParams.set('category', category)
     }
 
     const response = await fetch(url.toString());

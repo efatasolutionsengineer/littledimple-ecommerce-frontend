@@ -1,4 +1,6 @@
-export const getCategories = async () => {
+import { CategoryResponse } from "../categories/types"
+
+export const getCategories = async (): Promise<CategoryResponse> => {
     const res = await fetch('/api/blog')
     const data = await res.json()
     return data
