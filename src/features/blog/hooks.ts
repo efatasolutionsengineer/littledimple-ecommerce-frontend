@@ -1,7 +1,25 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import { getCategories, getPostsByCategory, getPostBySlug, getLatestPostsByCategory } from "./api"
-import { BlogArticle } from "./types"
+import { getCategories, getPostsByCategory, getPostBySlug, getLatestPostsByCategory, getAllPosts } from "./api"
+import { Article, BlogArticle } from "./types"
 
+export const useGetAllPosts = (params: {
+    page?: number;
+    limit?: number;
+    category?: string;
+}) => useInfiniteQuery({
+    queryKey: ['posts', params],
+    queryFn: ({ pageParam }) => {
+        const response = getAllPosts({ ...params, page: pageParam })
+        return response.then(data => ({ blog_posts: data.data.blog_posts, page: pageParam }))
+    },
+    select: (data) => {
+        return data.pages.flatMap((page) => page.blog_posts);
+    },
+    getNextPageParam: (lastPage: { blog_posts: Article[], page: number }) => {
+        return lastPage.blog_posts.length > 0 ? lastPage.page + 1 : undefined;
+    },
+    initialPageParam: 1,
+})
 export const useGetCategories = () => useQuery({
     queryKey: ['categories'],
     queryFn: getCategories

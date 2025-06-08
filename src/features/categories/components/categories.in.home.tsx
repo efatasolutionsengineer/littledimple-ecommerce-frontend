@@ -6,8 +6,7 @@ import { Category } from "../types";
 import Link from "next/link";
 
 export const CategoriesInHome = () => {
-    const { data } = useCategoriesInHome();
-    const isLoading = true;
+    const { data, isLoading } = useCategoriesInHome();
 
     return (
         <div className="my-32 relative">

@@ -1,6 +1,8 @@
-
 import Link from "next/link"
-import { BlogArticle } from "../types"
+import { Article } from "../types"
+import { useGetAllPosts } from "../hooks"
+import { formatDate } from "date-fns"
+import { id } from "date-fns/locale"
 
 const variant = [
     {
@@ -17,37 +19,12 @@ const variant = [
     },
 ]
 
-const blogList: BlogArticle[] = [
-    {
-        title: 'Alasan Mengapa Little Dimple Jadi Brand Favorit Para Ibu',
-        slug: "alasan-mengapa-little-dimple-jadi-brand-favorit-para-ibu",
-        category: 'Tips n Trik',
-        publishedDate: '30 Mar, 2023',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        thumbnail: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D",
-        author: { name: 'John Doe', avatar: 'https://via.placeholder.com/150' }
-    },
-    {
-        thumbnail: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D",
-        title: 'Masak MPASI hanya 30 menit? Kenalan yuk dengan Little Dimple Portable Cooker',
-        slug: "masak-mpasi-hanya-30-menit-kenalan-yuk-dengan-little-dimple-portable-cooker",
-        category: 'MPASI',
-        publishedDate: '26 Mar, 2023',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        author: { name: 'John Doe', avatar: 'https://via.placeholder.com/150' }
-    },
-    {
-        thumbnail: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D",
-        title: 'Menu Mpasi untuk Si Kecil yang Mulai Tumbuh Gigi',
-        slug: "menu-mpasi-untuk-si-kecil-yang-mulai-tumbuh-gigi",
-        category: 'MPASI',
-        publishedDate: '26 Mar, 2023',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        author: { name: 'John Doe', avatar: 'https://via.placeholder.com/150' }
-    }
-]
-
 export const BlogInHome = () => {
+    const { data, isLoading } = useGetAllPosts({
+        page: 1,
+        limit: 3,
+    })
+
     return (
         <div className="my-16">
             <div>
@@ -58,19 +35,20 @@ export const BlogInHome = () => {
                 </div>
             </div>
             <div className="flex items-start justify-center gap-8 flex-wrap">
-                {blogList.map((item, idx) => (
-                    <BlogCard key={idx} item={item} accent={variant[idx % variant.length]} />
+                {data?.map((item, idx) => (
+                    <BlogCard key={item.id} item={item} accent={variant[idx % variant.length]} isLoading={isLoading} />
                 ))}
             </div>
         </div>
     )
 }
 
-const BlogCard = ({ item, accent }: {
-    item: BlogArticle, accent: {
+const BlogCard = ({ item, accent, isLoading }: {
+    item?: Article, accent: {
         color: string,
         backgroundColor: string
-    }
+    },
+    isLoading: boolean
 }) => {
     return (
         <div className="relative max-w-[300px] w-full px-8 py-16">
@@ -83,20 +61,20 @@ const BlogCard = ({ item, accent }: {
             </svg>
 
             <div className="relative w-full mb-4">
-                <CustomThumbnail imageUrl={item.thumbnail} />
+                <CustomThumbnail imageUrl={item?.image_thumbnail_url || ''} />
             </div>
 
             <div>
                 <div className="flex justify-between flex-wrap items-center font-(family-name:--font-dm-sans) text-sm mb-2">
-                    <p className={`text-white rounded-2xl  px-2 py-1 ${accent.backgroundColor}`}>{item.category}</p>
-                    <p className={`font-medium ${accent.color}`}>{item.publishedDate}</p>
+                    {isLoading ? <div className="w-20 h-6 bg-gray-200 rounded-2xl animate-pulse" /> : <p className={`text-white rounded-2xl  px-2 py-1 ${accent.backgroundColor}`}>{item?.category_name}</p>}
+                    {isLoading ? <div className="w-20 h-6 bg-gray-200 rounded-2xl animate-pulse" /> : <p className={`font-medium ${accent.color}`}>{formatDate(item?.created_at || '', 'dd MMM, yyyy', { locale: id })}</p>}
                 </div>
-                <h4 className="text-left text-hijau-tua mb-4">{item.title}</h4>
+                {isLoading ? <div className="w-full h-16 bg-gray-200 rounded-2xl animate-pulse" /> : <h4 className="text-left text-hijau-tua mb-4 line-clamp-2">{item?.title}</h4>}
             </div>
 
-            <Link href={`/blog/${item.category}/${item.slug}`} className="text-black font-semibold mt-auto font-dm-sans cursor-pointer">
-                Keep reading <span className="inline-block ml-1">→</span>
-            </Link>
+            { isLoading ? <div className="mt-4 w-26 h-8 bg-gray-200 rounded-2xl animate-pulse" /> : <Link href={`/blog/${item?.category_id}/${item?.slug}`} className="text-black font-semibold mt-auto font-dm-sans cursor-pointer">
+                    Keep reading <span className="inline-block ml-1">→</span>
+                </Link>}
         </div>
     )
 }
