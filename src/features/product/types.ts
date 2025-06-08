@@ -1,3 +1,10 @@
+export type Pagination = {
+    total: number,
+    page: number,
+    limit: number,
+    totalPages: number,
+}
+
 export type ProductReview = {
     id: string;
     review: string;
@@ -6,8 +13,13 @@ export type ProductReview = {
         name: string;
         avatar: string;
     };
-    createdAt: string;
+    created_at: string;
 };
+
+export type ProductReviewResponse = {
+    reviews: ProductReview[],
+    pagination: Pagination,
+}
 
 export type ProductResponse = {
     products?: Product[],
@@ -30,7 +42,7 @@ export type Product = {
     deleted_at: string,
     slug: string,
     more_info: string,
-    media_more_info: ProductMediaMoreInfo,
+    media_more_info: string,
     kode_produk: string,
     weight: number,
     size: string,

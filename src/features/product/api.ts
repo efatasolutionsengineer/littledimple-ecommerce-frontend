@@ -1,4 +1,4 @@
-import { ProductResponse } from "./types";
+import { Product, ProductResponse, ProductReviewResponse } from "./types";
 
 export const getProducts = async (params: {
     sort_by?: string;
@@ -35,8 +35,8 @@ export const getProducts = async (params: {
     return data;
 };
 
-export const getProductDetail = async (id: string) => {
-    const url = new URL(`/api/product/${id}`, process.env.NEXT_PUBLIC_API_URL);
+export const getProductDetail = async (slug: string): Promise<{ product: Product }> => {
+    const url = new URL(`/api/products/slug/${slug}`, process.env.NEXT_PUBLIC_API_URL);
     const response = await fetch(url.toString());
     const data = await response.json();
     return data;
@@ -45,8 +45,8 @@ export const getProductDetail = async (id: string) => {
 export const getProductReviews = async (id: string, params?: {
     page?: number;
     limit?: number;
-}) => {
-    const url = new URL(`/api/product-review/${id}`, process.env.NEXT_PUBLIC_API_URL);
+}): Promise<ProductReviewResponse> => {
+    const url = new URL(`/api/reviews/slug/${id}`, process.env.NEXT_PUBLIC_API_URL);
 
     if (params?.page) {
         url.searchParams.set('page', params.page.toString());
@@ -99,7 +99,6 @@ export const getListProducts = async ({
     }
 
     const response = await fetch(url.toString());
-    console.log(url.toString());
     const data = await response.json();
     return data;
 };

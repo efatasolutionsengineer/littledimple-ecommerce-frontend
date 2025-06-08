@@ -18,7 +18,6 @@ export const ProductInHome = () => {
     });
 
     const doAddProductToCart = (productId: number) => {
-        console.log(productId, 'productId');
         addProductToCart({ product_id: productId, quantity: 1 });
     }
 

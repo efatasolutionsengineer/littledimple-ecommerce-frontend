@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import ArrowLeft from "@/assets/images/arrow_left.png"
 import Image from "next/image";
 
-export const DetailBreadcrumb = ({ category, product }: { category: string, product: string }) => {
+export const DetailBreadcrumb = ({ category, category_id, product }: { category: string, category_id: number, product: string }) => {
     const router = useRouter();
     return (
         <div className="flex flex-wrap items-center font-(family-name:--font-dm-sans) gap-5 sm:gap-2 px-5 sm:px-0 py-10">
@@ -13,7 +13,7 @@ export const DetailBreadcrumb = ({ category, product }: { category: string, prod
             <div className="flex flex-wrap items-center gap-2">
                 <Link href="/product" className="capitalize hover:underline">Product</Link>
                 <span className="mx-2">&gt;</span>
-                <Link href={`/product/category/${category}`} className="capitalize hover:underline">{category.replace(/[-_]/g, ' ')}</Link>
+                <Link href={`/product/category/${category_id}`} className="capitalize hover:underline">{category}</Link>
                 <span className="mx-2">&gt;</span>
                 <Link href={`product/detail/${product}`} className="capitalize hover:underline">{product}</Link>
             </div>

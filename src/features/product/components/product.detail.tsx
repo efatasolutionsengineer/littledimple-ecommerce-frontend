@@ -7,39 +7,53 @@ import { HTMLViewer } from "@/shared/components/html-viewer";
 import { ProductDetailReviews } from "./product.detail.reviews";
 import { DetailBreadcrumb } from "./detail.breadcrumb";
 import { ProductPhotosSlider } from "./product.photos.slider";
-import { useAddToCart } from "@/features/cart/hooks";
+import { useAddProductToCart } from "@/features/cart/hooks";
 import { toast } from "sonner";
 import { QuantityControl } from "./quantity.control";
+import Error from "@/shared/components/error";
+import { calculatePriceAfterDiscount, isDiscountNotExpired } from "../utils";
+import { ProductMediaMoreInfo } from "../types";
 
 export const ProductDetail = ({ slug }: { slug: string }) => {
     const [moreInfo, setMoreInfo] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const { data, isLoading, error } = useGetProductDetail(slug);
-    const { mutate: addToCart } = useAddToCart({
+    const { mutate: addProductToCart, isPending: isAddingProductToCart } = useAddProductToCart({
         onSuccess: () => {
-            toast.success('Product added to cart successfully!');
+            toast.success('Product added to cart');
         },
         onError: () => {
-            toast.error('Failed to add product to cart. Please try again.');
+            toast.error('Failed to add product to cart');
         }
     });
+
+    const doAddProductToCart = (productId: number) => {
+        const quantity = Number(inputRef.current?.value || 1);
+        if (quantity < 1 || quantity > product.stock) {
+            toast.error("Invalid quantity");
+            return;
+        }
+        addProductToCart({ product_id: productId, quantity: quantity });
+    }
 
     if (isLoading) {
         return <div>Loading...</div>
     }
 
     if (error) {
-        return <div>Error: {error.message}</div>
+        return <Error>Error: {error.message}</Error>
     }
 
-    if (data.message) {
-        return <div>Error: {data.message}</div>
+    if (!data?.product) {
+        return <Error>Product not found</Error>
     }
 
-    // Function to generate social media sharing URLs
+    const { product } = data;
+    const moreInfoValue: ProductMediaMoreInfo = JSON.parse(product.media_more_info);
+
     const generateShareUrls = () => {
         const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
-        const title = `Check out ${data.name}`;
+        const title = `Check out ${product.name}!`;
 
         return {
             twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(currentUrl)}`,
@@ -51,46 +65,29 @@ export const ProductDetail = ({ slug }: { slug: string }) => {
 
     const shareUrls = generateShareUrls();
 
-    function addProductToCart(): void {
-        const quantity = Number(inputRef.current?.value || 1);
-        if (quantity < 1 || quantity > data.stock) {
-            toast.error("Invalid quantity");
-            return;
-        }
-
-        const cartItem = {
-            id: data.id,
-            product_name: data.name,
-            price: data.price,
-            quantity: quantity,
-            media_link: data.photos[0]
-        };
-
-        addToCart(cartItem);
-    }
-
     return (
         <div>
-            <DetailBreadcrumb category={data.category} product={data.name} />
+            <DetailBreadcrumb category={product.category_name} category_id={product.category_id} product={product.name} />
             <div className="grid sm:grid-cols-2 gap-[30px]">
                 <div className="w-full aspect-square rounded-[10px] overflow-hidden mb-6 bg-neutral-gray">
-
-                    <ProductPhotosSlider images={data.photos} />
+                    <ProductPhotosSlider title={product.name} images={[product.image_url, ...moreInfoValue.images]} />
                 </div>
                 <div className="flex flex-col gap-4">
                     <div className="px-5 sm:px-0 mb-[10px] border-b border-[#E4E4E4] pb-[26px]">
                         <div className="flex flex-row flex-wrap gap-2">
-                            <h2 className="grow text-[30px] text-(--hijau-tua)">{data.name}</h2>
-                            <div className="flex flex-col gap-1 text-[32px] text-primary font-(family-name:--font-urbanist) font-bold">
-                                {data.price_after_discount && <p>${data.price_after_discount}</p>}
-                                <p className={data.price_after_discount ? "line-through" : ""}>${data.price}</p>
+                            <h2 className="grow text-[30px] text-(--hijau-tua)">{product.name}</h2>
+                            <div className="flex flex-row gap-3 font-urbanist text-primary text-[30px] font-bold">
+                                {isLoading ? <div className="w-16 h-8 bg-gray-200 animate-pulse rounded-lg" /> : <p>Rp {isDiscountNotExpired(product?.discount_expires_at ?? '') ? calculatePriceAfterDiscount(product?.price ?? '', product?.discount_percentage ?? '').toLocaleString('id-ID') : Number(product?.price).toLocaleString('id-ID')}</p>}
+                                {isLoading ? <div className="w-10 h-8 bg-gray-200 animate-pulse rounded-lg" /> : isDiscountNotExpired(product.discount_expires_at ?? '') ? <p className="line-through">
+                                    Rp {Number(product.price).toLocaleString('id-ID')}
+                                </p> : null}
                             </div>
                         </div>
                         <div className="flex gap-1 items-center justify-start mb-6">
                             {[...Array(5)].map((_, index) => (
                                 <svg
                                     key={index}
-                                    className={`w-4 h-4 ${index < data.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                                    className={`w-4 h-4 ${index < Number(product.rating) ? 'text-yellow-400' : 'text-gray-300'}`}
                                     fill="currentColor"
                                     viewBox="0 0 20 20"
                                 >
@@ -99,17 +96,17 @@ export const ProductDetail = ({ slug }: { slug: string }) => {
                             ))}
                         </div>
                     </div>
-                    <p className="font-(family-name:--font-dm-sans) text-neutral-gray">{data.text_summary}</p>
-                    <p className="font-(family-name:--font-dm-sans) text-primary mb-[30px]">In Stock: {data.stock}</p>
+                    <p className="font-(family-name:--font-dm-sans) text-neutral-gray">{product.description}</p>
+                    <p className="font-(family-name:--font-dm-sans) text-primary mb-[30px]">In Stock: {product.stock}</p>
                     <div className="flex flex-row flex-wrap items-center gap-5 mb-5 px-5 sm:px-0">
                         <span className="text-hijau-tua text-[18px]">Quantity</span>
                         <QuantityControl ref={inputRef} />
                     </div>
                     <div className="flex flex-col sm:flex-row gap-2 sm:gap-5 font-(family-name:--font-dm-sans) font-bold">
                         <button
-                            className="w-auto bg-primary-ungu text-white py-3 px-10 rounded-xl hover:bg-primary-ungu/80"
-                            onClick={addProductToCart}
-                        >Add to Cart</button>
+                            className="flex items-center justify-center gap-2 w-auto bg-primary-ungu text-white py-3 px-10 rounded-xl hover:bg-primary-ungu/80"
+                            onClick={() => doAddProductToCart(product.id)}
+                        >{isAddingProductToCart ? <div className="w-4 h-4 animate-spin rounded-full border-2 border-white border-t-transparent" /> : <></>} Add to Cart</button>
                         <button className="w-auto bg-primary-hijau text-white py-3 px-10 rounded-xl hover:bg-primary-hijau/80">Buy Now</button>
                     </div>
                     <div className="mt-6 flex flex-row flex-wrap px-5 sm:px-0 gap-10">
@@ -166,22 +163,25 @@ export const ProductDetail = ({ slug }: { slug: string }) => {
                     </div>
                 </div>
             </div>
-            <div className="my-[30px] pb-[30px] border-b border-tertiary-gray">
+            <div className="my-[30px] pb-[30px] border-b border-tertiary-gray px-4">
                 <div className="text-[30px] mb-[15px]">
                     <button className={`inline-block mr-[30px] ${moreInfo ? 'text-hijau-muda hover:underline' : 'text-hijau-tua'}`} onClick={() => setMoreInfo(false)}>Description</button>
                     <button className={`inline-block ${moreInfo ? 'text-hijau-tua' : 'text-hijau-muda hover:underline'}`} onClick={() => setMoreInfo(true)}>More Information</button>
                 </div>
-                <div className="flex gap-4 flex-col sm:flex-row">
-                    <HTMLViewer className="grow" content={moreInfo ? data.more_info : data.description} />
-                    {moreInfo && (
-                        <video
-                            src={data.media_more_info}
-                            className="w-full h-full object-cover w-full sm:w-1/3 rounded-xl"
-                            controls
-                            muted
-                            loop
-                        />
-                    )}
+                <div className="flex gap-4 flex-col sm:flex-row justify-between items-start">
+                    <HTMLViewer className="grow w-full" content={product.more_info} />
+                    {moreInfo &&moreInfoValue.videos[0] !== "" && (<div>{
+                        moreInfoValue.videos.map((video: string, index: number) => (
+                            <video
+                                key={index}
+                                src={video}
+                                className="w-full h-full object-cover max-w-102 w-full mb-4 rounded-xl"
+                                controls
+                                muted
+                                loop
+                            />
+                        ))}
+                    </div>)}
                 </div>
             </div>
             <ProductDetailReviews id={slug} />

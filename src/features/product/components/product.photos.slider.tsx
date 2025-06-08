@@ -1,17 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import { useState, useEffect } from 'react';
-
-interface Photo {
-    link: string;
-    title: string;
-    is_main: boolean;
-}
+import { useState, useEffect, useCallback } from 'react';
 
 interface ProductPhotosSliderProps {
-    images: Photo[];
+    images: string[];
+    title: string;
 }
 
-export const ProductPhotosSlider = ({ images }: ProductPhotosSliderProps) => {
+export const ProductPhotosSlider = ({ images, title }: ProductPhotosSliderProps) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
@@ -19,11 +14,11 @@ export const ProductPhotosSlider = ({ images }: ProductPhotosSliderProps) => {
         setCurrentImageIndex(index);
     };
 
-    const nextSlide = () => {
+    const nextSlide = useCallback(() => {
         setCurrentImageIndex((prevIndex) => 
             prevIndex === images.length - 1 ? 0 : prevIndex + 1
         );
-    };
+    }, [images.length]);
 
     useEffect(() => {
         let intervalId: NodeJS.Timeout;
@@ -39,13 +34,13 @@ export const ProductPhotosSlider = ({ images }: ProductPhotosSliderProps) => {
                 clearInterval(intervalId);
             }
         };
-    }, [isAutoPlaying, images.length]);
+    }, [isAutoPlaying, images.length, nextSlide]);
 
     return (
         <div className="flex flex-col gap-4 relative">
             {/* Preview Images */}
             <div className="flex flex-col gap-2 absolute top-1 left-1 z-10">
-                {images.map((image: Photo, index: number) => (
+                {images.map((image: string, index: number) => (
                     <div
                         key={index}
                         className={`cursor-pointer transition-all duration-300 ${
@@ -56,9 +51,9 @@ export const ProductPhotosSlider = ({ images }: ProductPhotosSliderProps) => {
                         onClick={() => handleImageClick(index)}
                     >
                         <img
-                            src={image.link}
-                            alt={image.title}
-                            className="w-24 h-24 object-cover rounded-lg border border-[#F0F0F0]"
+                            src={image}
+                            alt={`${title} - ${index}`}
+                            className="w-24 h-24 object-cover rounded-lg border border-[#F0F0F0] text-xs font-poppins text-right"
                             loading='lazy'
                         />
                     </div>
@@ -68,9 +63,9 @@ export const ProductPhotosSlider = ({ images }: ProductPhotosSliderProps) => {
             {/* Main Image */}
             <div className="relative w-full aspect-square">
                 <img
-                    src={images[currentImageIndex]?.link}
-                    alt={images[currentImageIndex]?.title}
-                    className="w-full h-full object-cover rounded-lg"
+                    src={images[currentImageIndex]}
+                    alt={`${title} - ${currentImageIndex}`}
+                    className="w-full h-full object-cover rounded-lg text-xs font-poppins text-right"
                     loading='lazy'
                 />
                 

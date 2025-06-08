@@ -1,3 +1,4 @@
+import { formatDateFromISOString } from "@/lib/date";
 import { useGetProductReviews } from "../hooks";
 import { ProductReview } from "../types";
 import { useState } from "react";
@@ -19,8 +20,8 @@ export const ProductDetailReviews = ({ id }: { id: string }) => {
         return <div>Error...</div>;
     }
 
-    const totalItems = data.total || data.data.length;
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const totalItems = data?.pagination.total || data?.reviews.length || 0;
+    const totalPages = data?.pagination.totalPages || 1;
     const startIndex = (currentPage - 1) * itemsPerPage + 1;
     const endIndex = Math.min(startIndex + itemsPerPage - 1, totalItems);
 
@@ -67,9 +68,9 @@ export const ProductDetailReviews = ({ id }: { id: string }) => {
     };
 
     return (
-        <div>
+        <div className="px-4">
             <h5 className="text-[30px] text-hijau-tua mb-[30px]">Reviews Customer</h5>
-            {data.data.map((review: ProductReview, index: number) => (
+            {data?.reviews.map((review: ProductReview, index: number) => (
                 <div key={`${review.id}-${index}`}>
                     <ReviewCard {...review} />
                 </div>
@@ -117,16 +118,16 @@ export const ProductDetailReviews = ({ id }: { id: string }) => {
 
 const ReviewCard = (review: ProductReview) => {
     return (
-        <div className="flex flex-wrap gap-[30px] mb-[30px] pb-[30px] border-b border-tertiary-gray">
-            <div className="rounded-full shadow-[0_4px_13px_rgba(0,0,0,0.45)] size-[100px] sm:size-[160px] overflow-hidden">
+        <div className="flex flex-wrap gap-2 sm:gap-8 mb-[30px] pb-[30px] border-b border-tertiary-gray">
+            <div className="rounded-full shadow-lg size-[60px] sm:size-[80px] overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img loading="lazy" src={review.user.avatar} alt={review.user.name} className="size-[100px] sm:size-[160px] object-cover" />
+                <img loading="lazy" src={'https://ui-avatars.com/api/?background=random'} alt={'review.user.name'} className="size-[60px] sm:size-[80px] object-cover" />
             </div>
             <div className="grow">
                 <div className="flex justify-between flex-wrap">
                     <div>
-                        <p className="text-[24px] text-hijau-tua inline-block mr-5">{review.user.name}</p>
-                        <p className="text-primary font-(family-name:--font-dm-sans) inline-block">{new Date(review.createdAt).toLocaleDateString()}</p>
+                        <p className="text-[24px] text-hijau-tua inline-block mr-5">{'review.user.name'}</p>
+                        <p className="text-primary font-(family-name:--font-dm-sans) inline-block">{formatDateFromISOString(review.created_at, "d MMM, yyyy . h:mm a")}</p>
                     </div>
                     <div className="flex gap-1 items-center justify-center mb-6">
                         {[...Array(5)].map((_, index) => (
