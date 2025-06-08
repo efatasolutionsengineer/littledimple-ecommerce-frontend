@@ -23,7 +23,9 @@ export const Footer = () => {
     const { data: home, isLoading } = useGetHome();
 
     return <div className="relative">
-        <Image src={BGFooter} alt="background footer" className="w-full h-full absolute inset-0 z-0" />
+        <div className="absolute inset-0 z-0">
+            <Image src={BGFooter} alt="background footer" className="w-full h-full object-cover" />
+        </div>
         <Image src={MobilFooter} height={90} alt="mobil decoration" className="hidden md:block absolute top-35 left-20" />
         <Image src={StarFooter} height={60} alt="star decoration" className="hidden md:block absolute bottom-30 left-10" />
         <Image src={PesawatFooter} height={90} alt="pesawat decoration" className="hidden md:block absolute top-35 right-20" />

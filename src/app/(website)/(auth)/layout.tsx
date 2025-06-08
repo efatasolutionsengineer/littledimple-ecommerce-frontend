@@ -7,19 +7,15 @@ import type { ReactNode } from "react";
 import styles from "./auth.module.css";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/features/auth/context";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { redirect } from "next/navigation";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
-	const pathname = usePathname();
 	const { isAuthenticated, isLoading } = useAuth();
-	const router = useRouter();
+	const pathname = usePathname();
 
-	useEffect(() => {
-		if (!isLoading && isAuthenticated) {
-			router.push('/');
-		}
-	}, [isLoading, isAuthenticated, router]);
+	if (isAuthenticated) {
+		redirect("/");
+	}
 
 	if (isLoading || isAuthenticated) {
 		return (

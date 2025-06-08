@@ -1,5 +1,12 @@
-export const postLogin = async ({ email, password }: { email: string, password: string }) => fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, {
+import { fetchWithAuth } from "../auth/utils";
+import { UserResponse } from "./types";
+
+export const postLogin = async (
+    { email, password }: 
+    { email: string, password: string }
+) => fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/login`, {
     method: 'POST',
+    credentials: 'include',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -8,6 +15,18 @@ export const postLogin = async ({ email, password }: { email: string, password: 
         password: password,
     }),
 });
+
+export const getProfile = async (): Promise<UserResponse> =>  fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me`, {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+}).then(res => res.json()) //fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me`).then(res => res.json())
+
+export const postLogout = async () => fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/users/logout`, {
+    method: 'POST',
+})
 
 export const postRegister = async (data: {
     username: string;

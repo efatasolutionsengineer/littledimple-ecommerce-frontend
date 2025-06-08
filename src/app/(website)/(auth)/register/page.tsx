@@ -3,7 +3,7 @@
 import { useForm } from "@tanstack/react-form";
 import { useState, useEffect } from "react";
 import FieldInfo from "@/shared/components/field-info";
-import { registerSchema, type RegisterFormType } from "@/features/auth/schema";
+import { registerSchema, type RegisterFormType } from "@/features/auth/types";
 import { getProvinces, getCities, getSubdistricts } from "@/features/auth/api";
 import { useRegisterUser } from "@/features/auth/hooks";
 import { z } from "zod";

@@ -1,16 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { forgotPassword, postLogin, postRegister } from "./api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { forgotPassword, getProfile, postLogin, postLogout, postRegister } from "./api";
 import { useRouter } from "next/navigation";
-import type { LoginFormType, RegisterFormType } from "./schema";
-import { useAuth } from "./context";
+import type { LoginFormType, RegisterFormType, UserResponse } from "./types";
+import { toast } from "sonner";
 
 interface LoginResponse {
-    token: string;
-    user: {
-        id: string;
-        email: string;
-        name: string;
-    };
+    message: string;
 }
 
 export const useLoginUser = () => {
@@ -28,17 +23,17 @@ export const useLoginUser = () => {
             
             return data as LoginResponse;
         },
-        onSuccess: (data) => {
-            // Store auth data in storage
-            localStorage.setItem('auth_token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-            
-            // Invalidate and refetch auth query
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['auth'] });
-            
-            // Redirect to home page
             router.push('/');
         },
+    });
+}
+
+export const useGetProfile = () => {
+    return useQuery<UserResponse, Error>({
+        queryKey: ['profile'],
+        queryFn: getProfile,
     });
 }
 
@@ -78,11 +73,19 @@ export const useForgotPassword = () => {
 }
 
 export const useLogout = () => {
-    const { logout } = useAuth();
     const router = useRouter();
+    const queryClient = useQueryClient();
+    const { mutate: logout } = useMutation({
+        mutationFn: postLogout,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['auth'] });
+            toast.success('Logout successful, see you next time!');
+            router.push('/login');
+        },
+        onError: () => {
+            toast.error('Failed to logout');
+        }
+    });
     
-    return () => {
-        logout();
-        router.push('/login');
-    };
+    return logout;
 }

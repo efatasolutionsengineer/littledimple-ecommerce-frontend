@@ -24,3 +24,17 @@ export const registerSchema = z.object({
 
 export type LoginFormType = z.infer<typeof loginSchema>;
 export type RegisterFormType = z.infer<typeof registerSchema>; 
+
+export type User = {
+    id: string;
+    username: string;
+    email: string;
+    full_name: string;
+    phone: string;
+    address: string;
+    role: string;
+}
+
+export type UserResponse = {
+    user: User;
+}

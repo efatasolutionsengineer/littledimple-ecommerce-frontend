@@ -2,16 +2,14 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginFormType } from "@/features/auth/schema";
+import { loginSchema, type LoginFormType } from "@/features/auth/types";
 import { useLoginUser, useForgotPassword } from "@/features/auth/hooks";
-import { useAuth } from "@/features/auth/context";
 import { useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
 import type { SubmitHandler, Resolver } from "react-hook-form";
 
 export default function LoginPage() {
-	const { isLoading } = useAuth();
 	const loginMutation = useLoginUser();
 	const forgotPasswordMutation = useForgotPassword();
 	const [isRecovering, setIsRecovering] = useState(false);
@@ -50,14 +48,6 @@ export default function LoginPage() {
 			setIsRecovering(false);
 		}
 	};
-
-	if (isLoading) {
-		return (
-			<div className="min-h-screen flex items-center justify-center">
-				<div className="w-8 h-8 border-4 border-green-800 border-t-transparent rounded-full animate-spin" />
-			</div>
-		);
-	}
 
 	return (
 		<form onSubmit={form.handleSubmit(onSubmit)}>
